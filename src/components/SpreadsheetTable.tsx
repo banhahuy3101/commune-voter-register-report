@@ -193,18 +193,18 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
       {/* Main Table Container */}
       <div className="overflow-x-auto custom-scrollbar">
         <table className="w-full border-collapse border border-slate-300 text-xs">
-          <thead>
+          <thead className="font-moul font-normal text-slate-900">
             {/* Main Section Header Row 1 */}
-            <tr className="bg-slate-100 text-slate-900 font-bold border-b border-slate-300">
+            <tr className="bg-slate-100 text-slate-900 border-b border-slate-300 text-[10px] md:text-xs">
               <th
                 rowSpan={3}
-                className="p-2 border border-slate-300 text-center min-w-[42px] bg-slate-100"
+                className="p-2 border border-slate-300 text-center min-w-[42px] bg-slate-100 font-normal"
               >
                 ល.រ
               </th>
               <th
                 rowSpan={3}
-                className="p-2 border border-slate-300 text-center min-w-[120px] bg-slate-100"
+                className="p-2 border border-slate-300 text-center min-w-[120px] bg-slate-100 font-normal"
               >
                 ឃុំ
               </th>
@@ -213,7 +213,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
               <th
                 colSpan={2}
                 rowSpan={2}
-                className="p-2 border border-slate-300 text-center bg-slate-200/80 text-slate-800"
+                className="p-2 border border-slate-300 text-center bg-slate-200/80 text-slate-800 font-normal"
               >
                 ចំនួនក្នុង <br /> បញ្ជីឆ្នាំ២០២៥
               </th>
@@ -221,7 +221,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
               {/* ចុះឈ្មោះបោះឆ្នោតថ្មី */}
               <th
                 colSpan={6}
-                className="p-2 border border-slate-300 text-center bg-teal-100/90 text-teal-900"
+                className="p-2 border border-slate-300 text-center bg-teal-100/90 text-teal-900 font-normal"
               >
                 ចុះឈ្មោះបោះឆ្នោតថ្មី
               </th>
@@ -229,7 +229,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
               {/* លុបឈ្មោះចេញពីបញ្ជី */}
               <th
                 colSpan={6}
-                className="p-2 border border-slate-300 text-center bg-sky-100/90 text-sky-900"
+                className="p-2 border border-slate-300 text-center bg-sky-100/90 text-sky-900 font-normal"
               >
                 លុបឈ្មោះចេញពីបញ្ជី
               </th>
@@ -237,7 +237,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
               {/* កែទិន្ន័យជីវប្រវត្តិ */}
               <th
                 colSpan={6}
-                className="p-2 border border-slate-300 text-center bg-amber-100/90 text-amber-900"
+                className="p-2 border border-slate-300 text-center bg-amber-100/90 text-amber-900 font-normal"
               >
                 កែទិន្ន័យជីវប្រវត្តិ
               </th>
@@ -245,7 +245,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
               {/* បច្ចុប្បន្នភាពទិន្នន័យជីវមាត្រ */}
               <th
                 colSpan={6}
-                className="p-2 border border-slate-300 text-center bg-purple-100/90 text-purple-900"
+                className="p-2 border border-slate-300 text-center bg-purple-100/90 text-purple-900 font-normal"
               >
                 បច្ចុប្បន្នភាពទិន្នន័យជីវមាត្រ
               </th>
@@ -254,7 +254,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
               <th
                 colSpan={2}
                 rowSpan={2}
-                className="p-2 border border-slate-300 text-center bg-slate-200/80 text-slate-800"
+                className="p-2 border border-slate-300 text-center bg-slate-200/80 text-slate-800 font-normal"
               >
                 ចំនួនក្នុងបញ្ជី <br /> ឆ្នាំ២០២៦
               </th>
@@ -262,100 +262,100 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
               {/* Action Column */}
               <th
                 rowSpan={3}
-                className="p-2 border border-slate-300 text-center min-w-[70px] bg-slate-100 text-slate-700"
+                className="p-2 border border-slate-300 text-center min-w-[70px] bg-slate-100 text-slate-700 font-normal"
               >
                 កែប្រែ
               </th>
             </tr>
 
             {/* Sub-Header Row 2: ដើមគ្រា / ក្នុងគ្រា / បូកយោង */}
-            <tr className="text-slate-800 font-semibold border-b border-slate-300">
+            <tr className="text-slate-800 border-b border-slate-300 text-[9px] md:text-[10px]">
               {/* ចុះឈ្មោះថ្មី */}
-              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-teal-50">
+              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-teal-50 font-normal">
                 ដើមគ្រា
               </th>
-              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-teal-50">
+              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-teal-50 font-normal">
                 ក្នុងគ្រា
               </th>
-              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-teal-100">
+              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-teal-100 font-normal">
                 បូកយោង
               </th>
 
               {/* លុបឈ្មោះ */}
-              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-sky-50">
+              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-sky-50 font-normal">
                 ដើមគ្រា
               </th>
-              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-sky-50">
+              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-sky-50 font-normal">
                 ក្នុងគ្រា
               </th>
-              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-sky-100">
+              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-sky-100 font-normal">
                 បូកយោង
               </th>
 
               {/* កែទិន្ន័យ */}
-              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-amber-50">
+              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-amber-50 font-normal">
                 ដើមគ្រា
               </th>
-              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-amber-50">
+              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-amber-50 font-normal">
                 ក្នុងគ្រា
               </th>
-              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-amber-100">
+              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-amber-100 font-normal">
                 បូកយោង
               </th>
 
               {/* ជីវមាត្រ */}
-              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-purple-50">
+              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-purple-50 font-normal">
                 ដើមគ្រា
               </th>
-              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-purple-50">
+              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-purple-50 font-normal">
                 ក្នុងគ្រា
               </th>
-              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-purple-100">
+              <th colSpan={2} className="p-1 border border-slate-300 text-center bg-purple-100 font-normal">
                 បូកយោង
               </th>
             </tr>
 
             {/* Sub-Header Row 3: សរុប / CPP for every pair */}
-            <tr className="text-[11px] font-bold text-slate-700 bg-slate-50 border-b border-slate-300">
+            <tr className="text-[8.5px] md:text-[9.5px] text-slate-700 bg-slate-50 border-b border-slate-300">
               {/* 2025 */}
-              <th className="p-1 border border-slate-300 text-center">សរុប</th>
-              <th className="p-1 border border-slate-300 text-center">CPP</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">សរុប</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">CPP</th>
 
               {/* ចុះឈ្មោះថ្មី */}
-              <th className="p-1 border border-slate-300 text-center">សរុប</th>
-              <th className="p-1 border border-slate-300 text-center">CPP</th>
-              <th className="p-1 border border-slate-300 text-center">សរុប</th>
-              <th className="p-1 border border-slate-300 text-center">CPP</th>
-              <th className="p-1 border border-slate-300 text-center bg-teal-100/60">សរុប</th>
-              <th className="p-1 border border-slate-300 text-center bg-teal-100/60">CPP</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">សរុប</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">CPP</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">សរុប</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">CPP</th>
+              <th className="p-1 border border-slate-300 text-center bg-teal-100/60 font-normal">សរុប</th>
+              <th className="p-1 border border-slate-300 text-center bg-teal-100/60 font-normal">CPP</th>
 
               {/* លុបឈ្មោះ */}
-              <th className="p-1 border border-slate-300 text-center">សរុប</th>
-              <th className="p-1 border border-slate-300 text-center">CPP</th>
-              <th className="p-1 border border-slate-300 text-center">សរុប</th>
-              <th className="p-1 border border-slate-300 text-center">CPP</th>
-              <th className="p-1 border border-slate-300 text-center bg-sky-100/60">សរុប</th>
-              <th className="p-1 border border-slate-300 text-center bg-sky-100/60">CPP</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">សរុប</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">CPP</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">សរុប</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">CPP</th>
+              <th className="p-1 border border-slate-300 text-center bg-sky-100/60 font-normal">សរុប</th>
+              <th className="p-1 border border-slate-300 text-center bg-sky-100/60 font-normal">CPP</th>
 
               {/* កែទិន្ន័យ */}
-              <th className="p-1 border border-slate-300 text-center">សរុប</th>
-              <th className="p-1 border border-slate-300 text-center">CPP</th>
-              <th className="p-1 border border-slate-300 text-center">សរុប</th>
-              <th className="p-1 border border-slate-300 text-center">CPP</th>
-              <th className="p-1 border border-slate-300 text-center bg-amber-100/60">សរុប</th>
-              <th className="p-1 border border-slate-300 text-center bg-amber-100/60">CPP</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">សរុប</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">CPP</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">សរុប</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">CPP</th>
+              <th className="p-1 border border-slate-300 text-center bg-amber-100/60 font-normal">សរុប</th>
+              <th className="p-1 border border-slate-300 text-center bg-amber-100/60 font-normal">CPP</th>
 
               {/* ជីវមាត្រ */}
-              <th className="p-1 border border-slate-300 text-center">សរុប</th>
-              <th className="p-1 border border-slate-300 text-center">CPP</th>
-              <th className="p-1 border border-slate-300 text-center">សរុប</th>
-              <th className="p-1 border border-slate-300 text-center">CPP</th>
-              <th className="p-1 border border-slate-300 text-center bg-purple-100/60">សរុប</th>
-              <th className="p-1 border border-slate-300 text-center bg-purple-100/60">CPP</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">សរុប</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">CPP</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">សរុប</th>
+              <th className="p-1 border border-slate-300 text-center font-normal">CPP</th>
+              <th className="p-1 border border-slate-300 text-center bg-purple-100/60 font-normal">សរុប</th>
+              <th className="p-1 border border-slate-300 text-center bg-purple-100/60 font-normal">CPP</th>
 
               {/* 2026 */}
-              <th className="p-1 border border-slate-300 text-center bg-slate-200/60">សរុប</th>
-              <th className="p-1 border border-slate-300 text-center bg-slate-200/60">CPP</th>
+              <th className="p-1 border border-slate-300 text-center bg-slate-200/60 font-normal">សរុប</th>
+              <th className="p-1 border border-slate-300 text-center bg-slate-200/60 font-normal">CPP</th>
             </tr>
           </thead>
 

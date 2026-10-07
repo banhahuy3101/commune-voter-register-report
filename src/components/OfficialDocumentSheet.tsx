@@ -74,113 +74,113 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
       {/* The Exact Table Layout */}
       <div className="overflow-x-auto print:overflow-visible">
         <table className="w-full border-collapse border border-slate-900 text-[10px] md:text-xs">
-          <thead>
+          <thead className="font-moul font-normal text-slate-950">
             {/* Row 1 */}
-            <tr className="bg-white font-bold text-center border-b border-slate-900">
-              <th rowSpan={3} className="p-1 border border-slate-900 min-w-[32px] bg-white">
+            <tr className="bg-white text-center border-b border-slate-900 text-[8.5px] md:text-[10px] leading-snug">
+              <th rowSpan={3} className="p-1 border border-slate-900 min-w-[32px] bg-white font-normal">
                 ល.រ
               </th>
-              <th rowSpan={3} className="p-1 border border-slate-900 min-w-[95px] bg-white">
+              <th rowSpan={3} className="p-1 border border-slate-900 min-w-[95px] bg-white font-normal">
                 ឃុំ
               </th>
-              <th colSpan={2} rowSpan={2} className="p-1 border border-slate-900 bg-white">
+              <th colSpan={2} rowSpan={2} className="p-1 border border-slate-900 bg-white font-normal">
                 ចំនួនក្នុង <br /> បញ្ជីឆ្នាំ២០២៥
               </th>
-              <th colSpan={6} className="p-1 border border-slate-900 bg-teal-50">
+              <th colSpan={6} className="p-1 border border-slate-900 bg-teal-50 font-normal">
                 ចុះឈ្មោះបោះឆ្នោតថ្មី
               </th>
-              <th colSpan={6} className="p-1 border border-slate-900 bg-sky-50">
+              <th colSpan={6} className="p-1 border border-slate-900 bg-sky-50 font-normal">
                 លុបឈ្មោះចេញពីបញ្ជី
               </th>
-              <th colSpan={6} className="p-1 border border-slate-900 bg-amber-50">
+              <th colSpan={6} className="p-1 border border-slate-900 bg-amber-50 font-normal">
                 កែទិន្ន័យជីវប្រវត្តិ
               </th>
-              <th colSpan={6} className="p-1 border border-slate-900 bg-purple-50">
+              <th colSpan={6} className="p-1 border border-slate-900 bg-purple-50 font-normal">
                 បច្ចុប្បន្នភាពទិន្នន័យជីវមាត្រ
               </th>
-              <th colSpan={2} rowSpan={2} className="p-1 border border-slate-900 bg-white">
+              <th colSpan={2} rowSpan={2} className="p-1 border border-slate-900 bg-white font-normal">
                 ចំនួនក្នុងបញ្ជី <br /> ឆ្នាំ២០២៦
               </th>
             </tr>
 
             {/* Row 2 */}
-            <tr className="font-semibold text-center border-b border-slate-900">
-              <th colSpan={2} className="p-0.5 border border-slate-900 bg-teal-50">
+            <tr className="text-center border-b border-slate-900 text-[8px] md:text-[9.5px] leading-snug">
+              <th colSpan={2} className="p-0.5 border border-slate-900 bg-teal-50 font-normal">
                 ដើមគ្រា
               </th>
-              <th colSpan={2} className="p-0.5 border border-slate-900 bg-teal-50">
+              <th colSpan={2} className="p-0.5 border border-slate-900 bg-teal-50 font-normal">
                 ក្នុងគ្រា
               </th>
-              <th colSpan={2} className="p-0.5 border border-slate-900 bg-teal-100">
+              <th colSpan={2} className="p-0.5 border border-slate-900 bg-teal-100 font-normal">
                 បូកយោង
               </th>
 
-              <th colSpan={2} className="p-0.5 border border-slate-900 bg-sky-50">
+              <th colSpan={2} className="p-0.5 border border-slate-900 bg-sky-50 font-normal">
                 ដើមគ្រា
               </th>
-              <th colSpan={2} className="p-0.5 border border-slate-900 bg-sky-50">
+              <th colSpan={2} className="p-0.5 border border-slate-900 bg-sky-50 font-normal">
                 ក្នុងគ្រា
               </th>
-              <th colSpan={2} className="p-0.5 border border-slate-900 bg-sky-100">
+              <th colSpan={2} className="p-0.5 border border-slate-900 bg-sky-100 font-normal">
                 បូកយោង
               </th>
 
-              <th colSpan={2} className="p-0.5 border border-slate-900 bg-amber-50">
+              <th colSpan={2} className="p-0.5 border border-slate-900 bg-amber-50 font-normal">
                 ដើមគ្រា
               </th>
-              <th colSpan={2} className="p-0.5 border border-slate-900 bg-amber-50">
+              <th colSpan={2} className="p-0.5 border border-slate-900 bg-amber-50 font-normal">
                 ក្នុងគ្រា
               </th>
-              <th colSpan={2} className="p-0.5 border border-slate-900 bg-amber-100">
+              <th colSpan={2} className="p-0.5 border border-slate-900 bg-amber-100 font-normal">
                 បូកយោង
               </th>
 
-              <th colSpan={2} className="p-0.5 border border-slate-900 bg-purple-50">
+              <th colSpan={2} className="p-0.5 border border-slate-900 bg-purple-50 font-normal">
                 ដើមគ្រា
               </th>
-              <th colSpan={2} className="p-0.5 border border-slate-900 bg-purple-50">
+              <th colSpan={2} className="p-0.5 border border-slate-900 bg-purple-50 font-normal">
                 ក្នុងគ្រា
               </th>
-              <th colSpan={2} className="p-0.5 border border-slate-900 bg-purple-100">
+              <th colSpan={2} className="p-0.5 border border-slate-900 bg-purple-100 font-normal">
                 បូកយោង
               </th>
             </tr>
 
             {/* Row 3 */}
-            <tr className="font-bold text-center border-b border-slate-900 bg-white text-[9px] md:text-[10px]">
-              <th className="p-0.5 border border-slate-900 bg-white">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-white">CPP</th>
+            <tr className="text-center border-b border-slate-900 bg-white text-[7.5px] md:text-[8.5px] leading-tight">
+              <th className="p-0.5 border border-slate-900 bg-white font-normal">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-white font-normal">CPP</th>
 
-              <th className="p-0.5 border border-slate-900 bg-teal-50/50">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-teal-50/50">CPP</th>
-              <th className="p-0.5 border border-slate-900 bg-teal-50/50">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-teal-50/50">CPP</th>
-              <th className="p-0.5 border border-slate-900 bg-teal-100/60">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-teal-100/60">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-teal-50/50 font-normal">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-teal-50/50 font-normal">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-teal-50/50 font-normal">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-teal-50/50 font-normal">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-teal-100/60 font-normal">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-teal-100/60 font-normal">CPP</th>
 
-              <th className="p-0.5 border border-slate-900 bg-sky-50/50">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-sky-50/50">CPP</th>
-              <th className="p-0.5 border border-slate-900 bg-sky-50/50">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-sky-50/50">CPP</th>
-              <th className="p-0.5 border border-slate-900 bg-sky-100/60">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-sky-100/60">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-sky-50/50 font-normal">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-sky-50/50 font-normal">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-sky-50/50 font-normal">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-sky-50/50 font-normal">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-sky-100/60 font-normal">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-sky-100/60 font-normal">CPP</th>
 
-              <th className="p-0.5 border border-slate-900 bg-amber-50/50">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-amber-50/50">CPP</th>
-              <th className="p-0.5 border border-slate-900 bg-amber-50/50">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-amber-50/50">CPP</th>
-              <th className="p-0.5 border border-slate-900 bg-amber-100/60">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-amber-100/60">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-amber-50/50 font-normal">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-amber-50/50 font-normal">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-amber-50/50 font-normal">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-amber-50/50 font-normal">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-amber-100/60 font-normal">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-amber-100/60 font-normal">CPP</th>
 
-              <th className="p-0.5 border border-slate-900 bg-purple-50/50">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-purple-50/50">CPP</th>
-              <th className="p-0.5 border border-slate-900 bg-purple-50/50">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-purple-50/50">CPP</th>
-              <th className="p-0.5 border border-slate-900 bg-purple-100/60">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-purple-100/60">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-purple-50/50 font-normal">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-purple-50/50 font-normal">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-purple-50/50 font-normal">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-purple-50/50 font-normal">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-purple-100/60 font-normal">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-purple-100/60 font-normal">CPP</th>
 
-              <th className="p-0.5 border border-slate-900 bg-white">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-white">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-white font-normal">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-white font-normal">CPP</th>
             </tr>
           </thead>
 
