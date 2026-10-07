@@ -22,11 +22,11 @@ import {
   INITIAL_COMMUNES_DATA,
   calculateRowFormulas,
 } from '../types/sheet';
-import firebaseConfig from '../../firebase-applet-config.json';
+import { firebaseConfig } from './firebaseConfig';
 
 // Initialize Firestore using the provisioned database ID
-export const db: Firestore = (firebaseConfig as any).firestoreDatabaseId
-  ? getFirestore(auth.app, (firebaseConfig as any).firestoreDatabaseId)
+export const db: Firestore = firebaseConfig.firestoreDatabaseId
+  ? getFirestore(auth.app, firebaseConfig.firestoreDatabaseId)
   : getFirestore(auth.app);
 
 const COMMUNES_COLLECTION = 'communes';

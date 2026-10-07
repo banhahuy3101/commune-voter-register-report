@@ -11,7 +11,7 @@ import {
   signOut,
   User,
 } from 'firebase/auth';
-import firebaseConfig from '../../firebase-applet-config.json';
+import { firebaseConfig } from './firebaseConfig';
 
 // Initialize or reuse Firebase App
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();

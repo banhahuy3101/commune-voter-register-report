@@ -17,6 +17,7 @@ import {
   Lock,
   Menu,
   CalendarDays,
+  HelpCircle,
 } from 'lucide-react';
 import { SheetMetadata } from '../types/sheet';
 
@@ -44,6 +45,7 @@ interface HeaderProps {
   onToggleSidebar?: () => void;
   monthsCount?: number;
   activeMonthName?: string;
+  onOpenOAuthHelp?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -70,6 +72,7 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleSidebar,
   monthsCount = 0,
   activeMonthName,
+  onOpenOAuthHelp,
 }) => {
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-xs">
@@ -126,30 +129,41 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               </div>
             ) : (
-              <button
-                onClick={onLogin}
-                className="flex items-center gap-1.5 bg-white text-gray-800 px-3 py-1 rounded-md text-xs font-medium hover:bg-gray-100 transition-colors shadow-xs cursor-pointer"
-              >
-                <svg className="w-3.5 h-3.5" viewBox="0 0 48 48">
-                  <path
-                    fill="#EA4335"
-                    d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
-                  />
-                  <path
-                    fill="#4285F4"
-                    d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
-                  />
-                  <path
-                    fill="#FBBC05"
-                    d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
-                  />
-                  <path
-                    fill="#34A853"
-                    d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
-                  />
-                </svg>
-                <span>ចូលគណនី Google</span>
-              </button>
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={onLogin}
+                  className="flex items-center gap-1.5 bg-white text-gray-800 px-3 py-1 rounded-md text-xs font-medium hover:bg-gray-100 transition-colors shadow-xs cursor-pointer"
+                >
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 48 48">
+                    <path
+                      fill="#EA4335"
+                      d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
+                    />
+                    <path
+                      fill="#4285F4"
+                      d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+                    />
+                  </svg>
+                  <span>ចូលគណនី Google</span>
+                </button>
+                {onOpenOAuthHelp && (
+                  <button
+                    onClick={onOpenOAuthHelp}
+                    title="ជំនួយដោះស្រាយ Error 403 (Test Users / Google Verification)"
+                    className="p-1 rounded text-slate-300 hover:text-amber-300 hover:bg-slate-800 transition-colors cursor-pointer"
+                  >
+                    <HelpCircle className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
             )}
           </div>
         </div>
@@ -303,11 +317,20 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {syncError && (
-          <div className="mt-2 pt-2 border-t border-gray-100 flex items-center justify-end text-[11px] text-red-600 font-medium">
-            <span className="flex items-center gap-1">
-              <AlertCircle className="w-3 h-3" />
-              {syncError}
+          <div className="mt-2 pt-2 border-t border-gray-100 flex flex-wrap items-center justify-between gap-2 text-[11px] text-red-600 font-medium">
+            <span className="flex items-center gap-1.5">
+              <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+              <span>{syncError}</span>
             </span>
+            {onOpenOAuthHelp && (
+              <button
+                onClick={onOpenOAuthHelp}
+                className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded text-xs font-semibold cursor-pointer transition-colors"
+              >
+                <HelpCircle className="w-3 h-3" />
+                <span>វិធីដោះស្រាយ Error 403 / Test Users</span>
+              </button>
+            )}
           </div>
         )}
       </div>

@@ -47,6 +47,7 @@ import { CollaboratorsModal } from './components/CollaboratorsModal';
 import { ShareCommuneLinksModal } from './components/ShareCommuneLinksModal';
 import { OfficialDocumentView } from './components/OfficialDocumentView';
 import { ConfirmationModal } from './components/ConfirmationModal';
+import { OAuthHelpModal } from './components/OAuthHelpModal';
 import {
   FileSpreadsheet,
   Users,
@@ -206,6 +207,8 @@ export default function App() {
   const [syncError, setSyncError] = useState<string | null>(null);
   const [successBanner, setSuccessBanner] = useState<string | null>(null);
   const [isFirebaseLive, setIsFirebaseLive] = useState(false);
+  const [isOAuthHelpOpen, setIsOAuthHelpOpen] = useState(false);
+  const [blockedEmail, setBlockedEmail] = useState('banha.fake@gmail.com');
 
   // Assigned commune object
   const assignedCommune = lockedCommuneId
@@ -373,7 +376,26 @@ export default function App() {
         setTimeout(() => setSuccessBanner(null), 4000);
       }
     } catch (err: any) {
-      setSyncError(`ការចូលគណនីបានបរាជ័យ៖ ${err.message || 'Error'}`);
+      console.error('Login error:', err);
+      const msg = String(err.message || '');
+      const code = String(err.code || '');
+
+      // Check if blocked by Google verification / OAuth testing status
+      if (
+        msg.includes('access_denied') ||
+        msg.includes('verification process') ||
+        msg.includes('403') ||
+        msg.includes('blocked') ||
+        code === 'auth/popup-closed-by-user' ||
+        code === 'auth/cancelled-popup-request'
+      ) {
+        setSyncError(
+          'ការចូលគណនីបានបរាជ័យ (Error 403 / Access Blocked)៖ Google OAuth Consent Screen ត្រូវការបន្ថែម Email របស់អ្នកទៅក្នុង Test Users។'
+        );
+        setIsOAuthHelpOpen(true);
+      } else {
+        setSyncError(`ការចូលគណនីបានបរាជ័យ៖ ${err.message || 'Error'}`);
+      }
     }
   };
 
@@ -813,6 +835,7 @@ export default function App() {
         onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         monthsCount={months.length}
         activeMonthName={activeMonth?.monthName}
+        onOpenOAuthHelp={() => setIsOAuthHelpOpen(true)}
       />
 
       {/* Success Notification Banner */}
@@ -1168,6 +1191,14 @@ export default function App() {
         isDestructive={confirmDialog.isDestructive}
         onConfirm={confirmDialog.onConfirm}
         onCancel={() => setConfirmDialog((prev) => ({ ...prev, isOpen: false }))}
+      />
+
+      {/* Google OAuth & Test Users Help Modal */}
+      <OAuthHelpModal
+        isOpen={isOAuthHelpOpen}
+        onClose={() => setIsOAuthHelpOpen(false)}
+        projectId="gen-lang-client-0648418690"
+        blockedEmail={blockedEmail}
       />
     </div>
   );
