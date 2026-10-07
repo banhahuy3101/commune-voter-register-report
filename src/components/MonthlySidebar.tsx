@@ -30,9 +30,15 @@ interface MonthlySidebarProps {
   months: MonthlyRecord[];
   activeMonthId: string;
   onSelectMonth: (monthId: string) => void;
-  onCreateMonth: (monthName: string, reportDate: string, copyCurrentData: boolean) => void;
+  onCreateMonth: (
+    monthName: string,
+    reportDate: string,
+    copyCurrentData: boolean,
+    createGoogleSheet: boolean
+  ) => void;
   onDeleteMonth: (monthId: string) => void;
   onDuplicateMonth: (monthId: string) => void;
+  isCreatingSheet?: boolean;
 }
 
 export const MonthlySidebar: React.FC<MonthlySidebarProps> = ({
@@ -44,6 +50,7 @@ export const MonthlySidebar: React.FC<MonthlySidebarProps> = ({
   onCreateMonth,
   onDeleteMonth,
   onDuplicateMonth,
+  isCreatingSheet = false,
 }) => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedDay, setSelectedDay] = useState<number>(7);
@@ -53,6 +60,7 @@ export const MonthlySidebar: React.FC<MonthlySidebarProps> = ({
   const [newMonthName, setNewMonthName] = useState('');
   const [newReportDate, setNewReportDate] = useState('');
   const [copyCurrent, setCopyCurrent] = useState(true);
+  const [createSheetSameTime, setCreateSheetSameTime] = useState(true);
 
   // Helper to recompute labels from day, month, year
   const applyDateComponents = (d: number, m: number, y: number, style = namingStyle) => {
@@ -141,7 +149,8 @@ export const MonthlySidebar: React.FC<MonthlySidebarProps> = ({
       newMonthName.trim(),
       newReportDate.trim() ||
         `ប្រចាំថ្ងៃទី ${toKhmerDigits(selectedDay)} ខែ ${KHMER_MONTH_NAMES[selectedMonth - 1]} ឆ្នាំ ${toKhmerDigits(selectedYear)}`,
-      copyCurrent
+      copyCurrent,
+      createSheetSameTime
     );
     setIsCreateModalOpen(false);
   };
@@ -280,7 +289,19 @@ export const MonthlySidebar: React.FC<MonthlySidebarProps> = ({
                     {/* Footer Actions */}
                     <div className="mt-2 pt-1.5 flex items-center justify-between gap-1 text-[11px]">
                       <div className="flex items-center gap-1">
-                        {m.spreadsheetId && (
+                        {m.spreadsheetUrl ? (
+                          <a
+                            href={m.spreadsheetUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-1.5 py-0.5 rounded border border-emerald-300 transition-colors"
+                            title="បើក Google Sheet នេះក្នុងផ្ទាំងថ្មី"
+                          >
+                            <FileSpreadsheet className="w-3 h-3 text-emerald-600" />
+                            <span>បើក Sheet</span>
+                          </a>
+                        ) : m.spreadsheetId ? (
                           <span
                             className="inline-flex items-center gap-0.5 text-[10px] font-medium text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200"
                             title="បានភ្ជាប់ Google Sheet"
@@ -288,7 +309,7 @@ export const MonthlySidebar: React.FC<MonthlySidebarProps> = ({
                             <FileSpreadsheet className="w-2.5 h-2.5 text-emerald-600" />
                             Sheet
                           </span>
-                        )}
+                        ) : null}
                       </div>
 
                       <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
@@ -629,6 +650,27 @@ export const MonthlySidebar: React.FC<MonthlySidebarProps> = ({
                 </div>
               </div>
 
+              {/* Create Google Sheet simultaneously option */}
+              <div className="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
+                <label className="flex items-start gap-2.5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={createSheetSameTime}
+                    onChange={(e) => setCreateSheetSameTime(e.target.checked)}
+                    className="mt-0.5 rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4 cursor-pointer"
+                  />
+                  <div>
+                    <span className="text-xs font-bold text-emerald-950 flex items-center gap-1.5">
+                      <FileSpreadsheet className="w-4 h-4 text-emerald-600 shrink-0" />
+                      បង្កើត Google Sheet ដំណាលគ្នា (Create Sheet at same time)
+                    </span>
+                    <span className="text-[11px] text-emerald-800 block mt-0.5 leading-relaxed">
+                      ប្រព័ន្ធនឹងបង្កើតឯកសារ Google Sheet ផ្លូវការថ្មីមួយក្នុង Google Drive ដោយស្វ័យប្រវត្តិតាមទម្រង់ស្រុកជើងព្រៃ ព្រមទាំងភ្ជាប់រូបមន្ត និងទិន្នន័យឃុំទាំង១០ ស្របពេលបង្កើតកំណត់ត្រានេះភ្លាមៗ។
+                    </span>
+                  </div>
+                </label>
+              </div>
+
               {/* Copy option */}
               <div className="bg-blue-50 p-3.5 rounded-xl border border-blue-200">
                 <label className="flex items-start gap-2.5 cursor-pointer">
@@ -654,15 +696,24 @@ export const MonthlySidebar: React.FC<MonthlySidebarProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsCreateModalOpen(false)}
-                  className="px-4 py-2 border border-slate-300 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-100 transition-colors cursor-pointer"
+                  disabled={isCreatingSheet}
+                  className="px-4 py-2 border border-slate-300 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-100 transition-colors cursor-pointer disabled:opacity-50"
                 >
                   បោះបង់
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all cursor-pointer"
+                  disabled={isCreatingSheet}
+                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-xs hover:shadow-md transition-all cursor-pointer flex items-center gap-1.5 disabled:opacity-60"
                 >
-                  យល់ព្រមបង្កើត
+                  {createSheetSameTime ? (
+                    <>
+                      <FileSpreadsheet className="w-3.5 h-3.5" />
+                      <span>{isCreatingSheet ? 'កំពុងបង្កើត...' : 'យល់ព្រមបង្កើតកំណត់ត្រា & Sheet'}</span>
+                    </>
+                  ) : (
+                    <span>យល់ព្រមបង្កើតកំណត់ត្រា</span>
+                  )}
                 </button>
               </div>
             </form>

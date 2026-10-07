@@ -17,9 +17,14 @@ export interface CreateSheetResponse {
 export async function createCommuneSpreadsheet(
   accessToken: string,
   metadata: SheetMetadata,
-  initialData: CommuneEntry[]
+  initialData: CommuneEntry[],
+  customTitle?: string
 ): Promise<CreateSheetResponse> {
-  const title = `លទ្ធផលនៃការពិនិត្យបញ្ជីឈ្មោះ និងការចុះឈ្មោះបោះឆ្នោត ២០២៦ - ស្រុកជើងព្រៃ`;
+  const title =
+    customTitle ||
+    (metadata.reportDateKh
+      ? `លទ្ធផលនៃការពិនិត្យបញ្ជីឈ្មោះ និងការចុះឈ្មោះបោះឆ្នោត ២០២៦ - ស្រុកជើងព្រៃ (${metadata.reportDateKh})`
+      : `លទ្ធផលនៃការពិនិត្យបញ្ជីឈ្មោះ និងការចុះឈ្មោះបោះឆ្នោត ២០២៦ - ស្រុកជើងព្រៃ`);
 
   // 1. Create Spreadsheet
   const createRes = await fetch(SHEETS_API, {
@@ -555,8 +560,7 @@ export async function createCommuneSpreadsheet(
 export async function syncSpreadsheetData(
   accessToken: string,
   spreadsheetId: string,
-  data: CommuneEntry[],
-  metadata?: SheetMetadata
+  data: CommuneEntry[]
 ): Promise<void> {
   const rows: any[][] = [];
 
@@ -602,58 +606,18 @@ export async function syncSpreadsheetData(
     rows.push(rData);
   });
 
-  const valueRanges: any[] = [
-    {
-      range: 'ទិន្នន័យឃុំទាំង១០!A10:AD19',
-      majorDimension: 'ROWS',
-      values: rows,
-    },
-  ];
-
-  if (metadata) {
-    if (metadata.reportDateKh) {
-      valueRanges.push({
-        range: 'ទិន្នន័យឃុំទាំង១០!G6',
-        values: [[metadata.reportDateKh]],
-      });
-    }
-    if (metadata.reportTitleKh) {
-      valueRanges.push({
-        range: 'ទិន្នន័យឃុំទាំង១០!A5',
-        values: [[metadata.reportTitleKh]],
-      });
-    }
-    if (metadata.signerRightDateLocation) {
-      valueRanges.push({
-        range: 'ទិន្នន័យឃុំទាំង១០!Y22',
-        values: [[metadata.signerRightDateLocation]],
-      });
-    }
-    if (metadata.signerLeftName) {
-      valueRanges.push({
-        range: 'ទិន្នន័យឃុំទាំង១០!B28',
-        values: [[metadata.signerLeftName]],
-      });
-    }
-    if (metadata.signerRightName) {
-      valueRanges.push({
-        range: 'ទិន្នន័យឃុំទាំង១០!Y28',
-        values: [[metadata.signerRightName]],
-      });
-    }
-  }
-
   const res = await fetch(
-    `${SHEETS_API}/${spreadsheetId}/values:batchUpdate`,
+    `${SHEETS_API}/${spreadsheetId}/values/ទិន្នន័យឃុំទាំង១០!A10:AD19?valueInputOption=USER_ENTERED`,
     {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        valueInputOption: 'USER_ENTERED',
-        data: valueRanges,
+        range: 'ទិន្នន័យឃុំទាំង១០!A10:AD19',
+        majorDimension: 'ROWS',
+        values: rows,
       }),
     }
   );
