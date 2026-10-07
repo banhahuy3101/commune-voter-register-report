@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import {
   CommuneEntry,
+  SheetMetadata,
   calculateDistrictTotal,
   calculateRowFormulas,
   formatKhmerNumber,
 } from '../types/sheet';
+import {
+  SIGNATURE_CHHAY_VANNSY_BASE64,
+  SIGNATURE_SIM_LEAKH_BASE64,
+} from '../constants/signatures';
 import { Edit3, Check, Calculator, Filter, ArrowUpDown, Lock, Sparkles, Calendar } from 'lucide-react';
 
 interface SpreadsheetTableProps {
@@ -15,6 +20,7 @@ interface SpreadsheetTableProps {
   onSelectCommuneId: (id: number | null) => void;
   lockedCommuneId?: number | null;
   reportDateKh?: string;
+  metadata?: SheetMetadata;
 }
 
 export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
@@ -25,6 +31,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
   onSelectCommuneId,
   lockedCommuneId,
   reportDateKh,
+  metadata,
 }) => {
   // Cell editing state
   const [editingCell, setEditingCell] = useState<{
@@ -575,6 +582,50 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
             </tr>
           </tbody>
         </table>
+      </div>
+
+      {/* Official Signatures & Stamp Section (Visible in Main Grid Table as well) */}
+      <div className="bg-slate-50/70 border-t border-slate-200 p-6 md:p-8 flex flex-col sm:flex-row justify-between items-center sm:items-start gap-8 text-center text-xs md:text-sm">
+        {/* Left Signer */}
+        <div className="space-y-1 font-moul w-64 flex flex-col items-center">
+          <div className="text-slate-900 font-normal">បានឃើញ និងឯកភាព</div>
+          <div className="text-slate-900 font-normal">ជ.គណៈអចិន្ត្រៃយ៍</div>
+          <div className="text-slate-900 font-normal">អនុប្រធានប្រចាំការ</div>
+
+          {/* Authentic Stamp & Signature of ឆាយ វ៉ាន់ស៊ី */}
+          <div className="h-28 my-1 flex items-center justify-center">
+            <img
+              src={SIGNATURE_CHHAY_VANNSY_BASE64}
+              alt="ត្រា និងហត្ថលេខា ឆាយ វ៉ាន់ស៊ី"
+              className="h-28 max-w-[240px] object-contain select-none pointer-events-none drop-shadow-xs"
+            />
+          </div>
+
+          <div className="text-slate-950 font-bold text-sm tracking-wide mt-1">
+            {metadata?.signerLeftName || 'ឆាយ វ៉ាន់ស៊ី'}
+          </div>
+        </div>
+
+        {/* Right Signer */}
+        <div className="space-y-1 font-moul w-64 flex flex-col items-center">
+          <div className="text-slate-800 text-xs font-semibold">
+            {metadata?.signerRightDateLocation || 'ជើងព្រៃ ថ្ងៃទី ៧ ខែតុលា ឆ្នាំ២០២៦'}
+          </div>
+          <div className="text-slate-900 font-normal">អ្នកធ្វើតារាង</div>
+
+          {/* Authentic Signature of ស៊ីម ល័ក្ខ */}
+          <div className="h-28 my-1 flex items-center justify-center">
+            <img
+              src={SIGNATURE_SIM_LEAKH_BASE64}
+              alt="ហត្ថលេខា ស៊ីម ល័ក្ខ"
+              className="h-24 max-w-[200px] object-contain select-none pointer-events-none drop-shadow-xs"
+            />
+          </div>
+
+          <div className="text-slate-950 font-bold text-sm tracking-wide mt-1">
+            {metadata?.signerRightName || 'ស៊ីម ល័ក្ខ'}
+          </div>
+        </div>
       </div>
     </div>
   );

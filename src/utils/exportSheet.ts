@@ -187,6 +187,28 @@ export const exportSheetToStandaloneHTML = (
   const element = document.getElementById(elementId);
   if (!element) return;
 
+  // Clone element and inline images as base64 data URLs so they work offline/anywhere
+  const clone = element.cloneNode(true) as HTMLElement;
+  const originalImgs = element.querySelectorAll('img');
+  const cloneImgs = clone.querySelectorAll('img');
+
+  originalImgs.forEach((origImg, index) => {
+    try {
+      if (origImg.complete && origImg.naturalWidth > 0 && cloneImgs[index]) {
+        const canvas = document.createElement('canvas');
+        canvas.width = origImg.naturalWidth;
+        canvas.height = origImg.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(origImg, 0, 0);
+          cloneImgs[index].src = canvas.toDataURL('image/png');
+        }
+      }
+    } catch {
+      // Keep original path if canvas extraction is restricted
+    }
+  });
+
   const docTitle = metadata
     ? [metadata.reportTitleKh || 'លទ្ធផលនៃការពិនិត្យបញ្ជីឈ្មោះ និងការចុះឈ្មោះបោះឆ្នោត', metadata.reportDateKh || '']
         .filter(Boolean)
@@ -245,7 +267,7 @@ export const exportSheetToStandaloneHTML = (
 </head>
 <body class="bg-white">
   <div class="sheet-container max-w-7xl mx-auto bg-white p-6 md:p-8 rounded-xl shadow-none border border-slate-200">
-    ${element.innerHTML}
+    ${clone.innerHTML}
   </div>
 </body>
 </html>`;

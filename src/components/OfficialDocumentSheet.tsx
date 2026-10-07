@@ -5,6 +5,10 @@ import {
   calculateDistrictTotal,
   formatKhmerNumber,
 } from '../types/sheet';
+import {
+  SIGNATURE_CHHAY_VANNSY_BASE64,
+  SIGNATURE_SIM_LEAKH_BASE64,
+} from '../constants/signatures';
 
 interface OfficialDocumentSheetProps {
   data: CommuneEntry[];
@@ -399,47 +403,42 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
       {/* Signatures & Seal Section (Matching Official Document) */}
       <div className="flex justify-between items-start mt-10 px-4 md:px-12 text-center text-xs md:text-sm">
         {/* Left Signer */}
-        <div className="space-y-1 font-moul w-64">
-          <div className="text-slate-900">បានឃើញ និងឯកភាព</div>
-          <div className="text-slate-900">ជ.គណៈអចិន្ត្រៃយ៍</div>
-          <div className="text-slate-900">អនុប្រធានប្រចាំការ</div>
+        <div className="space-y-1 font-moul w-64 flex flex-col items-center">
+          <div className="text-slate-900 font-normal">បានឃើញ និងឯកភាព</div>
+          <div className="text-slate-900 font-normal">ជ.គណៈអចិន្ត្រៃយ៍</div>
+          <div className="text-slate-900 font-normal">អនុប្រធានប្រចាំការ</div>
 
-          {/* Circular Red Official Stamp */}
-          <div className="py-4 relative flex items-center justify-center">
-            <div className="w-24 h-24 rounded-full border-2 border-red-600 border-dashed flex flex-col items-center justify-center text-red-600 font-bold p-1 bg-red-50/20 rotate-[-8deg] shadow-xs">
-              <div className="text-[9px] font-moul">គណៈកម្មាធិការស្រុក</div>
-              <div className="text-[14px]">★</div>
-              <div className="text-[8px] font-moul">ជើងព្រៃ</div>
-            </div>
+          {/* Official Stamp & Signature of ឆាយ វ៉ាន់ស៊ី */}
+          <div className="h-28 my-1 flex items-center justify-center">
+            <img
+              src={SIGNATURE_CHHAY_VANNSY_BASE64}
+              alt="ត្រា និងហត្ថលេខា ឆាយ វ៉ាន់ស៊ី"
+              className="h-28 max-w-[240px] object-contain select-none pointer-events-none drop-shadow-xs"
+            />
           </div>
 
-          <div className="text-slate-950 font-bold text-sm tracking-wide mt-2">
+          <div className="text-slate-950 font-bold text-sm tracking-wide mt-1">
             {metadata.signerLeftName || 'ឆាយ វ៉ាន់ស៊ី'}
           </div>
         </div>
 
         {/* Right Signer */}
-        <div className="space-y-1 font-moul w-64">
+        <div className="space-y-1 font-moul w-64 flex flex-col items-center">
           <div className="text-slate-800 text-xs font-semibold">
             {metadata.signerRightDateLocation || 'ជើងព្រៃ ថ្ងៃទី ៧ ខែតុលា ឆ្នាំ២០២៦'}
           </div>
-          <div className="text-slate-900">អ្នកធ្វើតារាង</div>
+          <div className="text-slate-900 font-normal">អ្នកធ្វើតារាង</div>
 
-          {/* Stylized Ink Signature */}
-          <div className="py-4 flex items-center justify-center">
-            <svg viewBox="0 0 160 70" className="w-32 h-16 text-blue-700">
-              <path
-                d="M10 50 Q40 10 70 45 T110 30 Q130 15 150 40 Q90 65 30 55"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-              />
-              <circle cx="115" cy="28" r="3" fill="currentColor" />
-            </svg>
+          {/* Authentic Signature of ស៊ីម ល័ក្ខ */}
+          <div className="h-28 my-1 flex items-center justify-center">
+            <img
+              src={SIGNATURE_SIM_LEAKH_BASE64}
+              alt="ហត្ថលេខា ស៊ីម ល័ក្ខ"
+              className="h-24 max-w-[200px] object-contain select-none pointer-events-none drop-shadow-xs"
+            />
           </div>
 
-          <div className="text-slate-950 font-bold text-sm tracking-wide mt-2">
+          <div className="text-slate-950 font-bold text-sm tracking-wide mt-1">
             {metadata.signerRightName || 'ស៊ីម ល័ក្ខ'}
           </div>
         </div>

@@ -1222,6 +1222,7 @@ export default function App() {
               onSelectCommuneId={(id) => setSelectedCommuneId(id)}
               lockedCommuneId={lockedCommuneId}
               reportDateKh={metadata.reportDateKh}
+              metadata={metadata}
             />
 
             {/* Instructions & Help Card */}
