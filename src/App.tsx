@@ -46,6 +46,7 @@ import { CommuneFormModal } from './components/CommuneFormModal';
 import { CollaboratorsModal } from './components/CollaboratorsModal';
 import { ShareCommuneLinksModal } from './components/ShareCommuneLinksModal';
 import { OfficialDocumentView } from './components/OfficialDocumentView';
+import { OfficialDocumentSheet } from './components/OfficialDocumentSheet';
 import { ConfirmationModal } from './components/ConfirmationModal';
 import { OAuthHelpModal } from './components/OAuthHelpModal';
 import {
@@ -877,39 +878,41 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col font-kantumruy text-slate-800">
       {/* Top Header */}
-      <Header
-        user={user}
-        onLogin={handleLogin}
-        onLogout={handleLogout}
-        metadata={metadata}
-        onUpdateMetadata={(m) => setMetadata((prev) => ({ ...prev, ...m }))}
-        onCreateSheet={handleRequestCreateSheet}
-        onSyncToSheet={handleRequestSyncToSheet}
-        onFetchFromSheet={handleFetchFromSheet}
-        onOpenCollaborators={() => setIsCollaboratorsOpen(true)}
-        onOpenCommunePopup={() => {
-          if (lockedCommuneId) setActiveCommuneId(lockedCommuneId);
-          setIsCommunePopupOpen(true);
-        }}
-        onOpenShareLinks={() => setIsShareLinksModalOpen(true)}
-        onToggleOfficialView={() => setIsOfficialView(!isOfficialView)}
-        isOfficialView={isOfficialView}
-        isSyncing={isSyncing}
-        isCreating={isCreating}
-        isFirebaseLive={isFirebaseLive}
-        lastSyncedAt={lastSyncedAt}
-        syncError={syncError}
-        lockedCommuneId={lockedCommuneId}
-        assignedCommuneName={assignedCommune?.communeName}
-        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-        monthsCount={months.length}
-        activeMonthName={activeMonth?.monthName}
-        onOpenOAuthHelp={() => setIsOAuthHelpOpen(true)}
-      />
+      <div className="print:hidden">
+        <Header
+          user={user}
+          onLogin={handleLogin}
+          onLogout={handleLogout}
+          metadata={metadata}
+          onUpdateMetadata={(m) => setMetadata((prev) => ({ ...prev, ...m }))}
+          onCreateSheet={handleRequestCreateSheet}
+          onSyncToSheet={handleRequestSyncToSheet}
+          onFetchFromSheet={handleFetchFromSheet}
+          onOpenCollaborators={() => setIsCollaboratorsOpen(true)}
+          onOpenCommunePopup={() => {
+            if (lockedCommuneId) setActiveCommuneId(lockedCommuneId);
+            setIsCommunePopupOpen(true);
+          }}
+          onOpenShareLinks={() => setIsShareLinksModalOpen(true)}
+          onToggleOfficialView={() => setIsOfficialView(!isOfficialView)}
+          isOfficialView={isOfficialView}
+          isSyncing={isSyncing}
+          isCreating={isCreating}
+          isFirebaseLive={isFirebaseLive}
+          lastSyncedAt={lastSyncedAt}
+          syncError={syncError}
+          lockedCommuneId={lockedCommuneId}
+          assignedCommuneName={assignedCommune?.communeName}
+          onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          monthsCount={months.length}
+          activeMonthName={activeMonth?.monthName}
+          onOpenOAuthHelp={() => setIsOAuthHelpOpen(true)}
+        />
+      </div>
 
       {/* Success Notification Banner */}
       {successBanner && (
-        <div className="bg-emerald-600 text-white px-4 py-2.5 text-xs md:text-sm font-medium flex items-center justify-between shadow-xs">
+        <div className="bg-emerald-600 text-white px-4 py-2.5 text-xs md:text-sm font-medium flex items-center justify-between shadow-xs print:hidden">
           <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
             <span className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 shrink-0" />
@@ -926,19 +929,21 @@ export default function App() {
       )}
 
       {/* App Body with Left Side Menu (Monthly Drawer / Sidebar) */}
-      <div className="flex-1 flex overflow-hidden relative">
+      <div className="flex-1 flex overflow-hidden relative print:overflow-visible">
         {/* Left Side Menu */}
-        <MonthlySidebar
-          isOpen={isSidebarOpen}
-          onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
-          months={months}
-          activeMonthId={activeMonthId}
-          onSelectMonth={handleSelectMonth}
-          onCreateMonth={handleCreateMonth}
-          onDeleteMonth={handleDeleteMonth}
-          onDuplicateMonth={handleDuplicateMonth}
-          isCreatingSheet={isCreating}
-        />
+        <div className="print:hidden">
+          <MonthlySidebar
+            isOpen={isSidebarOpen}
+            onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+            months={months}
+            activeMonthId={activeMonthId}
+            onSelectMonth={handleSelectMonth}
+            onCreateMonth={handleCreateMonth}
+            onDeleteMonth={handleDeleteMonth}
+            onDuplicateMonth={handleDuplicateMonth}
+            isCreatingSheet={isCreating}
+          />
+        </div>
 
         {/* Scrollable Content Container */}
         <div className="flex-1 overflow-y-auto min-h-0 flex flex-col custom-scrollbar">
@@ -946,7 +951,7 @@ export default function App() {
           <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
         {/* Assigned Commune Link Banner (When accessing via commune-specific link) */}
         {assignedCommune && (
-          <div className="bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-900 text-white p-4.5 rounded-2xl shadow-md border border-blue-600/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-900 text-white p-4.5 rounded-2xl shadow-md border border-blue-600/50 flex flex-col md:flex-row md:items-center justify-between gap-4 print:hidden">
             <div className="flex items-start sm:items-center gap-3.5">
               <div className="p-3 bg-amber-400 text-slate-950 rounded-xl shadow-xs shrink-0">
                 <Lock className="w-5 h-5" />
@@ -1009,7 +1014,7 @@ export default function App() {
 
         {/* Intro Info Banner if Sheet is not yet connected */}
         {!metadata.spreadsheetId && !assignedCommune && (
-          <div className="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-2xl p-6 shadow-md border border-blue-800 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-2xl p-6 shadow-md border border-blue-800 flex flex-col md:flex-row md:items-center justify-between gap-6 print:hidden">
             <div className="space-y-2 max-w-2xl">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-400 text-blue-950">
                 <FileSpreadsheet className="w-3.5 h-3.5" />
@@ -1054,7 +1059,17 @@ export default function App() {
             onBackToGrid={() => setIsOfficialView(false)}
           />
         ) : (
-          <div className="space-y-4">
+          <>
+            {/* When in Grid view, render isolated official document sheet for browser print (Ctrl+P / Menu) */}
+            <div className="hidden print:block">
+              <OfficialDocumentSheet
+                id="official-document-sheet"
+                data={communes}
+                metadata={metadata}
+              />
+            </div>
+
+            <div className="space-y-4 print:hidden">
             {/* Quick Actions Bar for Commune Clerks */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Card 1: Commune Quick Selector & Pop-up Trigger */}
@@ -1206,11 +1221,12 @@ export default function App() {
               </ul>
             </div>
           </div>
+          </>
         )}
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-500">
+      <footer className="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-500 print:hidden">
         គណៈកម្មាធិការស្រុកជើងព្រៃ ខេត្តកំពង់ចាម • ប្រព័ន្ធគ្រប់គ្រងការពិនិត្យបញ្ជីឈ្មោះ និងចុះឈ្មោះបោះឆ្នោត ឆ្នាំ ២០២៦
       </footer>
         </div>
