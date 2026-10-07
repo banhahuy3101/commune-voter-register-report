@@ -1,127 +1,10 @@
 import { CommuneEntry, SheetMetadata, calculateDistrictTotal } from '../types/sheet';
 
 /**
- * Triggers clean printing of ONLY the official document sheet element
+ * Triggers native clean browser print preview
  */
-export const printSheetContentOnly = (elementId: string = 'official-document-sheet') => {
-  const element = document.getElementById(elementId);
-  if (!element) {
-    window.print();
-    return;
-  }
-
-  // Remove any previously created print iframe
-  const existingFrame = document.getElementById('print-sheet-iframe');
-  if (existingFrame) {
-    existingFrame.remove();
-  }
-
-  // Create isolated hidden iframe for printing
-  const iframe = document.createElement('iframe');
-  iframe.id = 'print-sheet-iframe';
-  iframe.style.position = 'fixed';
-  iframe.style.right = '0';
-  iframe.style.bottom = '0';
-  iframe.style.width = '0';
-  iframe.style.height = '0';
-  iframe.style.border = '0';
-  iframe.style.opacity = '0';
-  iframe.style.pointerEvents = 'none';
-  document.body.appendChild(iframe);
-
-  const doc = iframe.contentWindow?.document || iframe.contentDocument;
-  if (!doc) {
-    window.print();
-    return;
-  }
-
-  const htmlContent = `<!DOCTYPE html>
-<html lang="km">
-<head>
-  <meta charset="UTF-8">
-  <title>លទ្ធផលពិនិត្យបញ្ជីឈ្មោះ និងចុះឈ្មោះបោះឆ្នោត - ស្រុកជើងព្រៃ</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&family=Moul&family=Battambang:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    @page {
-      size: A4 landscape;
-      margin: 8mm 6mm;
-    }
-    * {
-      box-sizing: border-box;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-    }
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Kantumruy Pro', -apple-system, sans-serif;
-      background: #ffffff;
-      color: #0f172a;
-      font-size: 10px;
-      line-height: 1.3;
-    }
-    .font-moul {
-      font-family: 'Moul', cursive, serif !important;
-    }
-    .font-kantumruy {
-      font-family: 'Kantumruy Pro', sans-serif !important;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      border: 1px solid #000;
-      font-size: 9px;
-    }
-    th, td {
-      border: 1px solid #000;
-      padding: 2.5px 3px;
-      text-align: center;
-    }
-    th {
-      font-weight: bold;
-    }
-    .bg-slate-100 { background-color: #f1f5f9 !important; }
-    .bg-slate-200 { background-color: #e2e8f0 !important; }
-    .bg-slate-300 { background-color: #cbd5e1 !important; }
-    .bg-teal-50 { background-color: #f0fdfa !important; }
-    .bg-teal-100 { background-color: #ccfbf1 !important; }
-    .bg-teal-200 { background-color: #99f6e4 !important; }
-    .bg-sky-50 { background-color: #f0f9ff !important; }
-    .bg-sky-100 { background-color: #e0f2fe !important; }
-    .bg-sky-200 { background-color: #bae6fd !important; }
-    .bg-amber-50 { background-color: #fffbeb !important; }
-    .bg-amber-100 { background-color: #fef3c7 !important; }
-    .bg-amber-200 { background-color: #fde68a !important; }
-    .bg-purple-50 { background-color: #faf5ff !important; }
-    .bg-purple-100 { background-color: #f3e8ff !important; }
-    .bg-purple-200 { background-color: #e9d5ff !important; }
-    img { max-width: 100%; height: auto; }
-    .signatures-section {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-      padding: 0 40px;
-    }
-  </style>
-</head>
-<body>
-  ${element.innerHTML}
-</body>
-</html>`;
-
-  doc.open();
-  doc.write(htmlContent);
-  doc.close();
-
-  iframe.contentWindow?.focus();
-  setTimeout(() => {
-    iframe.contentWindow?.print();
-    setTimeout(() => {
-      iframe.remove();
-    }, 3000);
-  }, 500);
+export const printSheetContentOnly = () => {
+  window.print();
 };
 
 /**
@@ -279,7 +162,7 @@ export const exportSheetToCSV = (data: CommuneEntry[], metadata: SheetMetadata) 
 };
 
 /**
- * Exports exclusively the Sheet content to a standalone HTML file
+ * Exports exclusively the Sheet content to a standalone HTML file with Tailwind CSS
  */
 export const exportSheetToStandaloneHTML = (elementId: string = 'official-document-sheet') => {
   const element = document.getElementById(elementId);
@@ -290,66 +173,50 @@ export const exportSheetToStandaloneHTML = (elementId: string = 'official-docume
 <head>
   <meta charset="UTF-8">
   <title>លទ្ធផលពិនិត្យបញ្ជីឈ្មោះ និងចុះឈ្មោះបោះឆ្នោត - ស្រុកជើងព្រៃ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&family=Moul&family=Battambang:wght@400;700&display=swap" rel="stylesheet">
   <style>
     @page {
       size: A4 landscape;
-      margin: 8mm 6mm;
+      margin: 6mm;
     }
-    * { box-sizing: border-box; }
     body {
-      margin: 20px auto;
-      max-width: 1400px;
-      font-family: 'Kantumruy Pro', sans-serif;
+      font-family: 'Kantumruy Pro', -apple-system, sans-serif;
       background: #f8fafc;
       color: #0f172a;
-      padding: 20px;
+      padding: 24px;
     }
-    .sheet-card {
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-      border: 1px solid #e2e8f0;
+    .font-moul {
+      font-family: 'Moul', cursive, serif !important;
     }
-    .font-moul { font-family: 'Moul', cursive, serif !important; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      border: 1px solid #000;
-      font-size: 11px;
+    .font-kantumruy {
+      font-family: 'Kantumruy Pro', sans-serif !important;
     }
-    th, td {
-      border: 1px solid #000;
-      padding: 3px 4px;
-      text-align: center;
-    }
-    th { font-weight: bold; }
-    .bg-slate-100 { background-color: #f1f5f9; }
-    .bg-slate-200 { background-color: #e2e8f0; }
-    .bg-slate-300 { background-color: #cbd5e1; }
-    .bg-teal-50 { background-color: #f0fdfa; }
-    .bg-teal-100 { background-color: #ccfbf1; }
-    .bg-teal-200 { background-color: #99f6e4; }
-    .bg-sky-50 { background-color: #f0f9ff; }
-    .bg-sky-100 { background-color: #e0f2fe; }
-    .bg-sky-200 { background-color: #bae6fd; }
-    .bg-amber-50 { background-color: #fffbeb; }
-    .bg-amber-100 { background-color: #fef3c7; }
-    .bg-amber-200 { background-color: #fde68a; }
-    .bg-purple-50 { background-color: #faf5ff; }
-    .bg-purple-100 { background-color: #f3e8ff; }
-    .bg-purple-200 { background-color: #e9d5ff; }
     @media print {
-      body { background: white; padding: 0; margin: 0; }
-      .sheet-card { border: none; box-shadow: none; padding: 0; }
+      body {
+        background: white !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .sheet-container {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+      table {
+        font-size: 7.5pt !important;
+      }
+      th, td {
+        padding: 1.5px 1px !important;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="sheet-card">
+  <div class="sheet-container max-w-7xl mx-auto bg-white p-8 rounded-xl shadow-md border border-slate-200">
     ${element.innerHTML}
   </div>
 </body>

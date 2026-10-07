@@ -16,7 +16,7 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
   onBackToGrid,
 }) => {
   const handlePrint = () => {
-    printSheetContentOnly('official-document-sheet');
+    printSheetContentOnly();
   };
 
   const handleExportCSV = () => {
