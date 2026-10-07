@@ -5,18 +5,21 @@ import {
   calculateDistrictTotal,
   formatKhmerNumber,
 } from '../types/sheet';
-import { Printer, Download, ArrowLeft } from 'lucide-react';
+import { Printer, Download, ArrowLeft, FileSpreadsheet } from 'lucide-react';
+import { exportToExcel } from '../services/excelExport';
 
 interface OfficialDocumentViewProps {
   data: CommuneEntry[];
   metadata: SheetMetadata;
-  onBackToGrid: () => void;
+  onBackToGrid?: () => void;
+  isPrintOnly?: boolean;
 }
 
 export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
   data,
   metadata,
   onBackToGrid,
+  isPrintOnly = false,
 }) => {
   const districtTotal = calculateDistrictTotal(data);
 
@@ -26,29 +29,43 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
 
   return (
     <div className="space-y-4">
-      {/* Control bar */}
-      <div className="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-xs print:hidden">
-        <button
-          onClick={onBackToGrid}
-          className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>ត្រឡប់ទៅតារាងកែសម្រួល (Back to Grid)</span>
-        </button>
+      {/* Control bar - Hidden during print / export */}
+      {!isPrintOnly && (
+        <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-xs print:hidden">
+          {onBackToGrid && (
+            <button
+              onClick={onBackToGrid}
+              className="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>ត្រឡប់ទៅតារាងកែសម្រួល (Back to Grid)</span>
+            </button>
+          )}
 
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handlePrint}
-            className="flex items-center gap-2 px-4 py-1.5 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors cursor-pointer shadow-xs"
-          >
-            <Printer className="w-4 h-4" />
-            <span>បោះពុម្ពឯកសារ (Print Document)</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              onClick={() => exportToExcel(data, metadata)}
+              className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 rounded-lg transition-colors cursor-pointer shadow-2xs"
+              title="ទាញយកជាឯកសារ Excel (.xlsx) ដែលមានតែ Header + Table + Sign"
+            >
+              <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
+              <span>នាំចេញជា Excel (.xlsx)</span>
+            </button>
+
+            <button
+              onClick={handlePrint}
+              className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors cursor-pointer shadow-xs"
+              title="បោះពុម្ព ឬរក្សាទុកជា PDF (Save as PDF) ដែលមានតែ Header + Table + Sign"
+            >
+              <Printer className="w-4 h-4 text-amber-300" />
+              <span>បោះពុម្ព / រក្សាទុក PDF</span>
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Official Sheet Print Canvas */}
-      <div className="bg-white p-8 md:p-12 rounded-xl shadow-lg border border-slate-200 max-w-7xl mx-auto print:shadow-none print:border-none print:p-0 print:m-0 text-slate-900 font-kantumruy">
+      <div className="official-document-canvas bg-white p-8 md:p-12 rounded-xl shadow-lg border border-slate-200 max-w-7xl mx-auto print:shadow-none print:border-none print:p-0 print:m-0 text-slate-900 font-kantumruy">
         {/* Document Header */}
         <div className="flex justify-between items-start mb-6">
           {/* Top-Left Letterhead */}

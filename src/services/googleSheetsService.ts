@@ -555,7 +555,8 @@ export async function createCommuneSpreadsheet(
 export async function syncSpreadsheetData(
   accessToken: string,
   spreadsheetId: string,
-  data: CommuneEntry[]
+  data: CommuneEntry[],
+  metadata?: SheetMetadata
 ): Promise<void> {
   const rows: any[][] = [];
 
@@ -601,18 +602,58 @@ export async function syncSpreadsheetData(
     rows.push(rData);
   });
 
-  const res = await fetch(
-    `${SHEETS_API}/${spreadsheetId}/values/ទិន្នន័យឃុំទាំង១០!A10:AD19?valueInputOption=USER_ENTERED`,
+  const valueRanges: any[] = [
     {
-      method: 'PUT',
+      range: 'ទិន្នន័យឃុំទាំង១០!A10:AD19',
+      majorDimension: 'ROWS',
+      values: rows,
+    },
+  ];
+
+  if (metadata) {
+    if (metadata.reportDateKh) {
+      valueRanges.push({
+        range: 'ទិន្នន័យឃុំទាំង១០!G6',
+        values: [[metadata.reportDateKh]],
+      });
+    }
+    if (metadata.reportTitleKh) {
+      valueRanges.push({
+        range: 'ទិន្នន័យឃុំទាំង១០!A5',
+        values: [[metadata.reportTitleKh]],
+      });
+    }
+    if (metadata.signerRightDateLocation) {
+      valueRanges.push({
+        range: 'ទិន្នន័យឃុំទាំង១០!Y22',
+        values: [[metadata.signerRightDateLocation]],
+      });
+    }
+    if (metadata.signerLeftName) {
+      valueRanges.push({
+        range: 'ទិន្នន័យឃុំទាំង១០!B28',
+        values: [[metadata.signerLeftName]],
+      });
+    }
+    if (metadata.signerRightName) {
+      valueRanges.push({
+        range: 'ទិន្នន័យឃុំទាំង១០!Y28',
+        values: [[metadata.signerRightName]],
+      });
+    }
+  }
+
+  const res = await fetch(
+    `${SHEETS_API}/${spreadsheetId}/values:batchUpdate`,
+    {
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        range: 'ទិន្នន័យឃុំទាំង១០!A10:AD19',
-        majorDimension: 'ROWS',
-        values: rows,
+        valueInputOption: 'USER_ENTERED',
+        data: valueRanges,
       }),
     }
   );

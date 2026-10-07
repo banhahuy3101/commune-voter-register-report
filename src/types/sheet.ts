@@ -518,3 +518,29 @@ export function formatKhmerNumber(num: number | string): string {
   const n = typeof num === 'string' ? parseFloat(num.replace(/,/g, '')) || 0 : num;
   return n.toLocaleString('en-US');
 }
+
+export const KHMER_DIGITS = ['០', '១', '២', '៣', '៤', '៥', '៦', '៧', '៨', '៩'];
+
+export function toKhmerDigits(num: number | string): string {
+  if (num === undefined || num === null) return '';
+  return String(num).replace(/[0-9]/g, (d) => KHMER_DIGITS[parseInt(d, 10)]);
+}
+
+export const KHMER_MONTH_NAMES = [
+  'មករា',
+  'កុម្ភៈ',
+  'មីនា',
+  'មេសា',
+  'ឧសភា',
+  'មិថុនា',
+  'កក្កដា',
+  'សីហា',
+  'កញ្ញា',
+  'តុលា',
+  'វិច្ឆិកា',
+  'ធ្នូ',
+];
+
+export function getDaysInMonth(year: number, month: number): number {
+  return new Date(year, month, 0).getDate();
+}

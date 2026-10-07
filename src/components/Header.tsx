@@ -18,6 +18,7 @@ import {
   Menu,
   CalendarDays,
   HelpCircle,
+  Download,
 } from 'lucide-react';
 import { SheetMetadata } from '../types/sheet';
 
@@ -46,6 +47,8 @@ interface HeaderProps {
   monthsCount?: number;
   activeMonthName?: string;
   onOpenOAuthHelp?: () => void;
+  onExportExcel?: () => void;
+  onPrintDocument?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -73,9 +76,11 @@ export const Header: React.FC<HeaderProps> = ({
   monthsCount = 0,
   activeMonthName,
   onOpenOAuthHelp,
+  onExportExcel,
+  onPrintDocument,
 }) => {
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-xs">
+    <header className="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-xs print:hidden">
       {/* Top Banner: Party, National Motto, and Auth Status */}
       <div className="bg-slate-900 text-slate-100 px-4 py-2 text-xs font-medium">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
@@ -256,6 +261,30 @@ export const Header: React.FC<HeaderProps> = ({
               <Printer className="w-3.5 h-3.5 text-amber-600" />
               <span>{isOfficialView ? 'មើលតារាង (Grid View)' : 'ទម្រង់ឯកសារផ្លូវការ (Print View)'}</span>
             </button>
+
+            {/* Direct Export to Excel (.xlsx) */}
+            {onExportExcel && (
+              <button
+                onClick={onExportExcel}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-semibold transition-colors cursor-pointer shadow-2xs"
+                title="នាំចេញជាឯកសារ Excel (.xlsx) ដែលមានតែ Header + Table + Sign"
+              >
+                <Download className="w-3.5 h-3.5 text-emerald-600" />
+                <span>នាំចេញ Excel</span>
+              </button>
+            )}
+
+            {/* Print / Save to PDF */}
+            {onPrintDocument && (
+              <button
+                onClick={onPrintDocument}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold transition-colors cursor-pointer shadow-xs"
+                title="បោះពុម្ព ឬរក្សាទុកជា PDF ដែលមានតែ Header + Table + Sign"
+              >
+                <Printer className="w-3.5 h-3.5 text-amber-300" />
+                <span>បោះពុម្ព / PDF</span>
+              </button>
+            )}
 
             {/* Google Sheets Status / Actions */}
             {metadata.spreadsheetId ? (

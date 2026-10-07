@@ -3,6 +3,9 @@ import {
   MonthlyRecord,
   formatKhmerNumber,
   calculateDistrictTotal,
+  toKhmerDigits,
+  KHMER_MONTH_NAMES,
+  getDaysInMonth,
 } from '../types/sheet';
 import {
   CalendarDays,
@@ -18,6 +21,7 @@ import {
   Sparkles,
   X,
   Calendar,
+  RefreshCw,
 } from 'lucide-react';
 
 interface MonthlySidebarProps {
@@ -42,30 +46,92 @@ export const MonthlySidebar: React.FC<MonthlySidebarProps> = ({
   onDuplicateMonth,
 }) => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<number>(7);
+  const [selectedMonth, setSelectedMonth] = useState<number>(10);
+  const [selectedYear, setSelectedYear] = useState<number>(2026);
+  const [namingStyle, setNamingStyle] = useState<'month_only' | 'exact_date' | 'custom'>('month_only');
   const [newMonthName, setNewMonthName] = useState('');
   const [newReportDate, setNewReportDate] = useState('');
   const [copyCurrent, setCopyCurrent] = useState(true);
 
-  // Month suggestion presets
-  const monthSuggestions = [
-    { name: 'ខែតុលា ឆ្នាំ២០២៦', date: 'ប្រចាំថ្ងៃទី ៧ ខែ តុលា ឆ្នាំ ២០២៦' },
-    { name: 'ខែវិច្ឆិកា ឆ្នាំ២០២៦', date: 'ប្រចាំថ្ងៃទី ៧ ខែ វិច្ឆិកា ឆ្នាំ ២០២៦' },
-    { name: 'ខែធ្នូ ឆ្នាំ២០២៦', date: 'ប្រចាំថ្ងៃទី ៧ ខែ ធ្នូ ឆ្នាំ ២០២៦' },
-    { name: 'ខែមករា ឆ្នាំ២០២៧', date: 'ប្រចាំថ្ងៃទី ៧ ខែ មករា ឆ្នាំ ២០២៧' },
-  ];
+  // Helper to recompute labels from day, month, year
+  const applyDateComponents = (d: number, m: number, y: number, style = namingStyle) => {
+    setSelectedDay(d);
+    setSelectedMonth(m);
+    setSelectedYear(y);
+
+    const khmerD = toKhmerDigits(d);
+    const khmerMonthName = KHMER_MONTH_NAMES[m - 1] || 'តុលា';
+    const khmerY = toKhmerDigits(y);
+
+    const generatedReportDate = `ប្រចាំថ្ងៃទី ${khmerD} ខែ ${khmerMonthName} ឆ្នាំ ${khmerY}`;
+    setNewReportDate(generatedReportDate);
+
+    if (style === 'month_only') {
+      setNewMonthName(`ខែ${khmerMonthName} ឆ្នាំ${khmerY}`);
+    } else if (style === 'exact_date') {
+      setNewMonthName(`ថ្ងៃទី ${khmerD} ខែ${khmerMonthName} ឆ្នាំ${khmerY}`);
+    }
+  };
 
   const handleOpenCreate = () => {
-    // Generate a smart next month suggestion
-    const nextMonthIndex = (months.length % 12) + 1;
-    const khmerMonthNames = [
-      'មករា', 'កុម្ភៈ', 'មីនា', 'មេសា', 'ឧសភា', 'មិថុនា',
-      'កក្កដា', 'សីហា', 'កញ្ញា', 'តុលា', 'វិច្ឆិកា', 'ធ្នូ'
-    ];
-    const defaultName = `ខែ${khmerMonthNames[(nextMonthIndex + 8) % 12]} ឆ្នាំ២០២៦`;
-    setNewMonthName(defaultName);
-    setNewReportDate(`ប្រចាំថ្ងៃទី ៧ ${defaultName}`);
+    const today = new Date();
+    const currentY = today.getFullYear() || 2026;
+    // Suggest next month
+    let targetM = today.getMonth() + 2;
+    let targetY = currentY;
+    if (targetM > 12) {
+      targetM = 1;
+      targetY += 1;
+    }
+    const targetD = 7;
+    setSelectedDay(targetD);
+    setSelectedMonth(targetM);
+    setSelectedYear(targetY);
+    setNamingStyle('month_only');
+    applyDateComponents(targetD, targetM, targetY, 'month_only');
     setCopyCurrent(true);
     setIsCreateModalOpen(true);
+  };
+
+  const handleDayChange = (d: number) => {
+    applyDateComponents(d, selectedMonth, selectedYear);
+  };
+
+  const handleMonthChange = (m: number) => {
+    const maxDays = getDaysInMonth(selectedYear, m);
+    const validDay = Math.min(selectedDay, maxDays);
+    applyDateComponents(validDay, m, selectedYear);
+  };
+
+  const handleYearChange = (y: number) => {
+    const maxDays = getDaysInMonth(y, selectedMonth);
+    const validDay = Math.min(selectedDay, maxDays);
+    applyDateComponents(validDay, selectedMonth, y);
+  };
+
+  const handleNativeDateChange = (dateStr: string) => {
+    if (!dateStr) return;
+    const [yStr, mStr, dStr] = dateStr.split('-');
+    const y = parseInt(yStr, 10);
+    const m = parseInt(mStr, 10);
+    const d = parseInt(dStr, 10);
+    if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
+      applyDateComponents(d, m, y);
+    }
+  };
+
+  const handleNamingStyleChange = (style: 'month_only' | 'exact_date' | 'custom') => {
+    setNamingStyle(style);
+    const khmerD = toKhmerDigits(selectedDay);
+    const khmerMonthName = KHMER_MONTH_NAMES[selectedMonth - 1] || 'តុលា';
+    const khmerY = toKhmerDigits(selectedYear);
+
+    if (style === 'month_only') {
+      setNewMonthName(`ខែ${khmerMonthName} ឆ្នាំ${khmerY}`);
+    } else if (style === 'exact_date') {
+      setNewMonthName(`ថ្ងៃទី ${khmerD} ខែ${khmerMonthName} ឆ្នាំ${khmerY}`);
+    }
   };
 
   const handleConfirmCreate = (e: React.FormEvent) => {
@@ -73,7 +139,8 @@ export const MonthlySidebar: React.FC<MonthlySidebarProps> = ({
     if (!newMonthName.trim()) return;
     onCreateMonth(
       newMonthName.trim(),
-      newReportDate.trim() || `ប្រចាំថ្ងៃទី ៧ ${newMonthName.trim()}`,
+      newReportDate.trim() ||
+        `ប្រចាំថ្ងៃទី ${toKhmerDigits(selectedDay)} ខែ ${KHMER_MONTH_NAMES[selectedMonth - 1]} ឆ្នាំ ${toKhmerDigits(selectedYear)}`,
       copyCurrent
     );
     setIsCreateModalOpen(false);
@@ -295,22 +362,22 @@ export const MonthlySidebar: React.FC<MonthlySidebarProps> = ({
         )}
       </aside>
 
-      {/* Modal: Create / Save New Month */}
+      {/* Modal: Create / Save New Record (Form Day, Month, Year) */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-2xs animate-in fade-in duration-150">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full border border-slate-200 overflow-hidden flex flex-col">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
             {/* Header */}
-            <div className="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+            <div className="px-5 py-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 bg-blue-600 rounded-xl text-white">
+                <div className="p-2 bg-blue-600 rounded-xl text-white shadow-xs">
                   <CalendarDays className="w-5 h-5" />
                 </div>
                 <div>
                   <h3 className="text-base font-bold font-moul tracking-wide text-amber-300">
-                    បង្កើត / រក្សាទុកខែថ្មី
+                    បង្កើត / រក្សាទុកកំណត់ត្រាថ្មី
                   </h3>
                   <div className="text-xs text-slate-300">
-                    ស្រុកជើងព្រៃ • បញ្ជីរបាយការណ៍ប្រចាំខែ
+                    ស្រុកជើងព្រៃ • កំណត់តាម ថ្ងៃ, ខែ, ឆ្នាំ (Day, Month, Year)
                   </div>
                 </div>
               </div>
@@ -322,56 +389,244 @@ export const MonthlySidebar: React.FC<MonthlySidebarProps> = ({
               </button>
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleConfirmCreate} className="p-5 space-y-4">
+            {/* Form Body */}
+            <form onSubmit={handleConfirmCreate} className="p-5 space-y-4 overflow-y-auto custom-scrollbar">
+              {/* Day, Month, Year Primary Selectors */}
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                    <Calendar className="w-4 h-4 text-blue-600" />
+                    <span>ជ្រើសរើស កាលបរិច្ឆេទ (ថ្ងៃ, ខែ, ឆ្នាំ)</span>
+                  </span>
+                  {/* Native Date Picker sync */}
+                  <label className="flex items-center gap-1 text-[11px] text-blue-700 hover:text-blue-900 cursor-pointer font-medium bg-blue-100/70 hover:bg-blue-100 px-2 py-0.5 rounded-md transition-colors">
+                    <span>ប្រតិទិន</span>
+                    <input
+                      type="date"
+                      value={`${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`}
+                      onChange={(e) => handleNativeDateChange(e.target.value)}
+                      className="w-4 h-4 opacity-0 absolute pointer-events-auto cursor-pointer"
+                    />
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2">
+                  {/* Day (ថ្ងៃ) */}
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                      ថ្ងៃ (Day):
+                    </label>
+                    <select
+                      value={selectedDay}
+                      onChange={(e) => handleDayChange(parseInt(e.target.value, 10))}
+                      className="w-full px-2.5 py-2 border border-slate-300 rounded-lg text-xs md:text-sm font-semibold text-slate-800 bg-white focus:ring-2 focus:ring-blue-500 shadow-2xs cursor-pointer"
+                    >
+                      {Array.from(
+                        { length: getDaysInMonth(selectedYear, selectedMonth) },
+                        (_, i) => i + 1
+                      ).map((d) => (
+                        <option key={d} value={d}>
+                          ថ្ងៃទី {toKhmerDigits(d)} ({d})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Month (ខែ) */}
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                      ខែ (Month):
+                    </label>
+                    <select
+                      value={selectedMonth}
+                      onChange={(e) => handleMonthChange(parseInt(e.target.value, 10))}
+                      className="w-full px-2.5 py-2 border border-slate-300 rounded-lg text-xs md:text-sm font-semibold text-slate-800 bg-white focus:ring-2 focus:ring-blue-500 shadow-2xs cursor-pointer"
+                    >
+                      {KHMER_MONTH_NAMES.map((name, idx) => (
+                        <option key={name} value={idx + 1}>
+                          ខែ{name} ({idx + 1 < 10 ? `0${idx + 1}` : idx + 1})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Year (ឆ្នាំ) */}
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                      ឆ្នាំ (Year):
+                    </label>
+                    <select
+                      value={selectedYear}
+                      onChange={(e) => handleYearChange(parseInt(e.target.value, 10))}
+                      className="w-full px-2.5 py-2 border border-slate-300 rounded-lg text-xs md:text-sm font-semibold text-slate-800 bg-white focus:ring-2 focus:ring-blue-500 shadow-2xs cursor-pointer"
+                    >
+                      {[2024, 2025, 2026, 2027, 2028, 2029, 2030].map((y) => (
+                        <option key={y} value={y}>
+                          ឆ្នាំ {toKhmerDigits(y)} ({y})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                {/* Quick Presets */}
+                <div className="pt-1 flex flex-wrap items-center gap-1.5">
+                  <span className="text-[10px] font-semibold text-slate-500 mr-1">
+                    រហ័ស៖
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const today = new Date();
+                      applyDateComponents(today.getDate(), today.getMonth() + 1, today.getFullYear());
+                    }}
+                    className="px-2 py-0.5 text-[11px] bg-white hover:bg-blue-50 hover:text-blue-700 text-slate-700 border border-slate-200 rounded-md transition-colors cursor-pointer"
+                  >
+                    ថ្ងៃនេះ
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const yest = new Date();
+                      yest.setDate(yest.getDate() - 1);
+                      applyDateComponents(yest.getDate(), yest.getMonth() + 1, yest.getFullYear());
+                    }}
+                    className="px-2 py-0.5 text-[11px] bg-white hover:bg-blue-50 hover:text-blue-700 text-slate-700 border border-slate-200 rounded-md transition-colors cursor-pointer"
+                  >
+                    ម្សិលមិញ
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => applyDateComponents(7, selectedMonth, selectedYear)}
+                    className="px-2 py-0.5 text-[11px] bg-white hover:bg-blue-50 hover:text-blue-700 text-slate-700 border border-slate-200 rounded-md transition-colors cursor-pointer"
+                  >
+                    ថ្ងៃទី ០៧
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => applyDateComponents(15, selectedMonth, selectedYear)}
+                    className="px-2 py-0.5 text-[11px] bg-white hover:bg-blue-50 hover:text-blue-700 text-slate-700 border border-slate-200 rounded-md transition-colors cursor-pointer"
+                  >
+                    ថ្ងៃទី ១៥
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const lastDay = getDaysInMonth(selectedYear, selectedMonth);
+                      applyDateComponents(lastDay, selectedMonth, selectedYear);
+                    }}
+                    className="px-2 py-0.5 text-[11px] bg-white hover:bg-blue-50 hover:text-blue-700 text-slate-700 border border-slate-200 rounded-md transition-colors cursor-pointer"
+                  >
+                    ចុងខែ
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      let nextM = selectedMonth + 1;
+                      let nextY = selectedYear;
+                      if (nextM > 12) {
+                        nextM = 1;
+                        nextY += 1;
+                      }
+                      const maxD = getDaysInMonth(nextY, nextM);
+                      applyDateComponents(Math.min(selectedDay, maxD), nextM, nextY);
+                    }}
+                    className="px-2 py-0.5 text-[11px] bg-white hover:bg-blue-50 hover:text-blue-700 text-slate-700 border border-slate-200 rounded-md transition-colors cursor-pointer"
+                  >
+                    ខែបន្ទាប់
+                  </button>
+                </div>
+              </div>
+
+              {/* Record Name Format Selector */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  ឈ្មោះខែ (Month Name):
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700">
+                    ឈ្មោះក្នុងបញ្ជី (Record Name):
+                  </label>
+                  <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg text-[10px]">
+                    <button
+                      type="button"
+                      onClick={() => handleNamingStyleChange('month_only')}
+                      className={`px-2 py-0.5 rounded-md font-semibold transition-colors cursor-pointer ${
+                        namingStyle === 'month_only'
+                          ? 'bg-white text-blue-700 shadow-2xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      តាមខែ
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleNamingStyleChange('exact_date')}
+                      className={`px-2 py-0.5 rounded-md font-semibold transition-colors cursor-pointer ${
+                        namingStyle === 'exact_date'
+                          ? 'bg-white text-blue-700 shadow-2xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      តាមថ្ងៃខែឆ្នាំ
+                    </button>
+                  </div>
+                </div>
                 <input
                   type="text"
                   required
                   value={newMonthName}
-                  onChange={(e) => setNewMonthName(e.target.value)}
-                  placeholder="ឧ. ខែវិច្ឆិកា ឆ្នាំ២០២៦"
+                  onChange={(e) => {
+                    setNewMonthName(e.target.value);
+                    setNamingStyle('custom');
+                  }}
+                  placeholder="ឧ. ខែតុលា ឆ្នាំ២០២៦ ឬ ថ្ងៃទី ០៧ ខែតុលា ឆ្នាំ២០២៦"
                   className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm font-semibold text-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-2xs"
                 />
               </div>
 
-              {/* Suggestions */}
+              {/* Report Date Label (កាលបរិច្ឆេទរបាយការណ៍) */}
               <div>
-                <div className="text-[11px] font-semibold text-slate-500 mb-1.5">
-                  ជ្រើសរើសឈ្មោះគំរូរហ័ស (Quick Suggestions):
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-bold text-slate-700">
+                    កាលបរិច្ឆេទរបាយការណ៍ (Report Date Label):
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      applyDateComponents(selectedDay, selectedMonth, selectedYear)
+                    }
+                    title="បង្កើតកាលបរិច្ឆេទឡើងវិញតាម ថ្ងៃ ខែ ឆ្នាំ"
+                    className="text-[10px] text-blue-600 hover:text-blue-800 flex items-center gap-1 cursor-pointer"
+                  >
+                    <RefreshCw className="w-3 h-3" />
+                    <span>ស្វ័យប្រវត្តឡើងវិញ</span>
+                  </button>
                 </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {monthSuggestions.map((s) => (
-                    <button
-                      key={s.name}
-                      type="button"
-                      onClick={() => {
-                        setNewMonthName(s.name);
-                        setNewReportDate(s.date);
-                      }}
-                      className="px-2.5 py-1 text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 rounded-lg transition-colors cursor-pointer"
-                    >
-                      {s.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  កាលបរិច្ឆេទរបាយការណ៍ (Report Date Label):
-                </label>
                 <input
                   type="text"
                   required
                   value={newReportDate}
                   onChange={(e) => setNewReportDate(e.target.value)}
-                  placeholder="ឧ. ប្រចាំថ្ងៃទី ៧ ខែ វិច្ឆិកា ឆ្នាំ ២០២៦"
+                  placeholder="ឧ. ប្រចាំថ្ងៃទី ៧ ខែ តុលា ឆ្នាំ ២០២៦"
                   className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm font-semibold text-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-2xs"
                 />
+              </div>
+
+              {/* Live Preview Card */}
+              <div className="bg-amber-50/70 border border-amber-200/80 rounded-xl p-3 text-xs space-y-1.5">
+                <div className="text-[11px] font-bold text-amber-900 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                  <span>គំរូក្បាលតារាង និងលិខិតផ្លូវការ (Preview):</span>
+                </div>
+                <div className="bg-white p-2.5 rounded-lg border border-amber-200 text-slate-800 space-y-1">
+                  <div className="font-moul text-[11px] text-slate-900 leading-relaxed text-center">
+                    របាយការណ៍បូកសរុបលទ្ធផលការពិនិត្យបញ្ជីឈ្មោះ និងការចុះឈ្មោះបោះឆ្នោត ឆ្នាំ{toKhmerDigits(selectedYear)}
+                  </div>
+                  <div className="text-[11px] font-semibold text-blue-700 text-center">
+                    {newReportDate}
+                  </div>
+                  <div className="text-[10px] text-slate-500 text-right italic pt-0.5">
+                    ទីតាំង/កាលបរិច្ឆេទ៖ ជើងព្រៃ {newReportDate.replace('ប្រចាំ', '').trim()}
+                  </div>
+                </div>
               </div>
 
               {/* Copy option */}
@@ -381,7 +636,7 @@ export const MonthlySidebar: React.FC<MonthlySidebarProps> = ({
                     type="checkbox"
                     checked={copyCurrent}
                     onChange={(e) => setCopyCurrent(e.target.checked)}
-                    className="mt-0.5 rounded text-blue-600 focus:ring-blue-500 w-4 h-4"
+                    className="mt-0.5 rounded text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer"
                   />
                   <div>
                     <span className="text-xs font-bold text-blue-900 block">
