@@ -1,10 +1,26 @@
 import { CommuneEntry, SheetMetadata, calculateDistrictTotal } from '../types/sheet';
 
 /**
- * Triggers native clean browser print preview
+ * Triggers native clean browser print preview with document title matching report title and date
  */
-export const printSheetContentOnly = () => {
-  window.print();
+export const printSheetContentOnly = (metadata?: SheetMetadata) => {
+  const originalTitle = document.title;
+  if (metadata) {
+    const titleParts = [
+      metadata.reportTitleKh || 'លទ្ធផលនៃការពិនិត្យបញ្ជីឈ្មោះ និងការចុះឈ្មោះបោះឆ្នោត ឆ្នាំ ២០២៦',
+      metadata.reportDateKh || '',
+    ].filter(Boolean);
+    document.title = titleParts.join(' - ');
+  }
+
+  // Allow browser time to register title change before calling print
+  setTimeout(() => {
+    window.print();
+    // Restore original document title after print dialog closes
+    setTimeout(() => {
+      document.title = originalTitle;
+    }, 1500);
+  }, 100);
 };
 
 /**
@@ -164,15 +180,24 @@ export const exportSheetToCSV = (data: CommuneEntry[], metadata: SheetMetadata) 
 /**
  * Exports exclusively the Sheet content to a standalone HTML file with Tailwind CSS
  */
-export const exportSheetToStandaloneHTML = (elementId: string = 'official-document-sheet') => {
+export const exportSheetToStandaloneHTML = (
+  elementId: string = 'official-document-sheet',
+  metadata?: SheetMetadata
+) => {
   const element = document.getElementById(elementId);
   if (!element) return;
+
+  const docTitle = metadata
+    ? [metadata.reportTitleKh || 'លទ្ធផលនៃការពិនិត្យបញ្ជីឈ្មោះ និងការចុះឈ្មោះបោះឆ្នោត', metadata.reportDateKh || '']
+        .filter(Boolean)
+        .join(' - ')
+    : 'លទ្ធផលពិនិត្យបញ្ជីឈ្មោះ និងចុះឈ្មោះបោះឆ្នោត - ស្រុកជើងព្រៃ';
 
   const fullHtml = `<!DOCTYPE html>
 <html lang="km">
 <head>
   <meta charset="UTF-8">
-  <title>លទ្ធផលពិនិត្យបញ្ជីឈ្មោះ និងចុះឈ្មោះបោះឆ្នោត - ស្រុកជើងព្រៃ</title>
+  <title>${docTitle}</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -184,9 +209,10 @@ export const exportSheetToStandaloneHTML = (elementId: string = 'official-docume
     }
     body {
       font-family: 'Kantumruy Pro', -apple-system, sans-serif;
-      background: #f8fafc;
+      background: #ffffff !important;
       color: #0f172a;
-      padding: 24px;
+      padding: 16px;
+      margin: 0;
     }
     .font-moul {
       font-family: 'Moul', cursive, serif !important;
@@ -196,7 +222,7 @@ export const exportSheetToStandaloneHTML = (elementId: string = 'official-docume
     }
     @media print {
       body {
-        background: white !important;
+        background: #ffffff !important;
         padding: 0 !important;
         margin: 0 !important;
       }
@@ -205,9 +231,11 @@ export const exportSheetToStandaloneHTML = (elementId: string = 'official-docume
         border: none !important;
         padding: 0 !important;
         max-width: 100% !important;
+        background: #ffffff !important;
       }
       table {
         font-size: 7.5pt !important;
+        background: #ffffff !important;
       }
       th, td {
         padding: 1.5px 1px !important;
@@ -215,8 +243,8 @@ export const exportSheetToStandaloneHTML = (elementId: string = 'official-docume
     }
   </style>
 </head>
-<body>
-  <div class="sheet-container max-w-7xl mx-auto bg-white p-8 rounded-xl shadow-md border border-slate-200">
+<body class="bg-white">
+  <div class="sheet-container max-w-7xl mx-auto bg-white p-6 md:p-8 rounded-xl shadow-none border border-slate-200">
     ${element.innerHTML}
   </div>
 </body>
@@ -226,7 +254,8 @@ export const exportSheetToStandaloneHTML = (elementId: string = 'official-docume
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.setAttribute('href', url);
-  link.setAttribute('download', `សន្លឹករបាយការណ៍_ស្រុកជើងព្រៃ.html`);
+  const cleanName = (metadata?.reportDateKh || 'Report').replace(/[/\\?%*:|"<>]/g, '_');
+  link.setAttribute('download', `${metadata?.reportTitleKh || 'សន្លឹករបាយការណ៍'}_${cleanName}.html`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

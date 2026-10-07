@@ -328,6 +328,31 @@ export default function App() {
     localStorage.setItem(STORAGE_KEY_ACTIVE_MONTH, activeMonthId);
   }, [activeMonthId]);
 
+  // Synchronize browser document title with report title and date before printing (Ctrl+P / Menu)
+  useEffect(() => {
+    let originalTitle = document.title;
+    const handleBeforePrint = () => {
+      originalTitle = document.title;
+      const titleParts = [
+        metadata.reportTitleKh || 'លទ្ធផលនៃការពិនិត្យបញ្ជីឈ្មោះ និងការចុះឈ្មោះបោះឆ្នោត ឆ្នាំ ២០២៦',
+        metadata.reportDateKh || '',
+      ].filter(Boolean);
+      document.title = titleParts.join(' - ');
+    };
+
+    const handleAfterPrint = () => {
+      document.title = originalTitle;
+    };
+
+    window.addEventListener('beforeprint', handleBeforePrint);
+    window.addEventListener('afterprint', handleAfterPrint);
+
+    return () => {
+      window.removeEventListener('beforeprint', handleBeforePrint);
+      window.removeEventListener('afterprint', handleAfterPrint);
+    };
+  }, [metadata.reportTitleKh, metadata.reportDateKh]);
+
   // Auth Initialization
   useEffect(() => {
     const unsubscribe = initAuth(

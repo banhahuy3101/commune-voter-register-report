@@ -76,29 +76,29 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
         <table className="w-full border-collapse border border-slate-900 text-[10px] md:text-xs">
           <thead>
             {/* Row 1 */}
-            <tr className="bg-slate-100 font-bold text-center border-b border-slate-900">
-              <th rowSpan={3} className="p-1 border border-slate-900 min-w-[32px]">
+            <tr className="bg-white font-bold text-center border-b border-slate-900">
+              <th rowSpan={3} className="p-1 border border-slate-900 min-w-[32px] bg-white">
                 ល.រ
               </th>
-              <th rowSpan={3} className="p-1 border border-slate-900 min-w-[95px]">
+              <th rowSpan={3} className="p-1 border border-slate-900 min-w-[95px] bg-white">
                 ឃុំ
               </th>
-              <th colSpan={2} rowSpan={2} className="p-1 border border-slate-900 bg-slate-200">
+              <th colSpan={2} rowSpan={2} className="p-1 border border-slate-900 bg-white">
                 ចំនួនក្នុង <br /> បញ្ជីឆ្នាំ២០២៥
               </th>
-              <th colSpan={6} className="p-1 border border-slate-900 bg-teal-100">
+              <th colSpan={6} className="p-1 border border-slate-900 bg-teal-50">
                 ចុះឈ្មោះបោះឆ្នោតថ្មី
               </th>
-              <th colSpan={6} className="p-1 border border-slate-900 bg-sky-100">
+              <th colSpan={6} className="p-1 border border-slate-900 bg-sky-50">
                 លុបឈ្មោះចេញពីបញ្ជី
               </th>
-              <th colSpan={6} className="p-1 border border-slate-900 bg-amber-100">
+              <th colSpan={6} className="p-1 border border-slate-900 bg-amber-50">
                 កែទិន្ន័យជីវប្រវត្តិ
               </th>
-              <th colSpan={6} className="p-1 border border-slate-900 bg-purple-100">
+              <th colSpan={6} className="p-1 border border-slate-900 bg-purple-50">
                 បច្ចុប្បន្នភាពទិន្នន័យជីវមាត្រ
               </th>
-              <th colSpan={2} rowSpan={2} className="p-1 border border-slate-900 bg-slate-200">
+              <th colSpan={2} rowSpan={2} className="p-1 border border-slate-900 bg-white">
                 ចំនួនក្នុងបញ្ជី <br /> ឆ្នាំ២០២៦
               </th>
             </tr>
@@ -147,40 +147,40 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
             </tr>
 
             {/* Row 3 */}
-            <tr className="font-bold text-center border-b border-slate-900 bg-slate-50 text-[9px] md:text-[10px]">
-              <th className="p-0.5 border border-slate-900">សរុប</th>
-              <th className="p-0.5 border border-slate-900">CPP</th>
+            <tr className="font-bold text-center border-b border-slate-900 bg-white text-[9px] md:text-[10px]">
+              <th className="p-0.5 border border-slate-900 bg-white">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-white">CPP</th>
 
-              <th className="p-0.5 border border-slate-900">សរុប</th>
-              <th className="p-0.5 border border-slate-900">CPP</th>
-              <th className="p-0.5 border border-slate-900">សរុប</th>
-              <th className="p-0.5 border border-slate-900">CPP</th>
-              <th className="p-0.5 border border-slate-900 bg-teal-100/70">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-teal-100/70">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-teal-50/50">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-teal-50/50">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-teal-50/50">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-teal-50/50">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-teal-100/60">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-teal-100/60">CPP</th>
 
-              <th className="p-0.5 border border-slate-900">សរុប</th>
-              <th className="p-0.5 border border-slate-900">CPP</th>
-              <th className="p-0.5 border border-slate-900">សរុប</th>
-              <th className="p-0.5 border border-slate-900">CPP</th>
-              <th className="p-0.5 border border-slate-900 bg-sky-100/70">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-sky-100/70">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-sky-50/50">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-sky-50/50">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-sky-50/50">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-sky-50/50">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-sky-100/60">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-sky-100/60">CPP</th>
 
-              <th className="p-0.5 border border-slate-900">សរុប</th>
-              <th className="p-0.5 border border-slate-900">CPP</th>
-              <th className="p-0.5 border border-slate-900">សរុប</th>
-              <th className="p-0.5 border border-slate-900">CPP</th>
-              <th className="p-0.5 border border-slate-900 bg-amber-100/70">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-amber-100/70">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-amber-50/50">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-amber-50/50">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-amber-50/50">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-amber-50/50">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-amber-100/60">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-amber-100/60">CPP</th>
 
-              <th className="p-0.5 border border-slate-900">សរុប</th>
-              <th className="p-0.5 border border-slate-900">CPP</th>
-              <th className="p-0.5 border border-slate-900">សរុប</th>
-              <th className="p-0.5 border border-slate-900">CPP</th>
-              <th className="p-0.5 border border-slate-900 bg-purple-100/70">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-purple-100/70">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-purple-50/50">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-purple-50/50">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-purple-50/50">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-purple-50/50">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-purple-100/60">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-purple-100/60">CPP</th>
 
-              <th className="p-0.5 border border-slate-900 bg-slate-200/70">សរុប</th>
-              <th className="p-0.5 border border-slate-900 bg-slate-200/70">CPP</th>
+              <th className="p-0.5 border border-slate-900 bg-white">សរុប</th>
+              <th className="p-0.5 border border-slate-900 bg-white">CPP</th>
             </tr>
           </thead>
 
@@ -281,114 +281,114 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
                 </td>
 
                 {/* 2026 List */}
-                <td className="p-1 border border-slate-900 font-bold bg-slate-100">
+                <td className="p-1 border border-slate-900 font-bold bg-white">
                   {formatKhmerNumber(row.list2026Total)}
                 </td>
-                <td className="p-1 border border-slate-900 font-bold bg-slate-100 text-blue-900">
+                <td className="p-1 border border-slate-900 font-bold bg-white text-blue-900">
                   {formatKhmerNumber(row.list2026Cpp)}
                 </td>
               </tr>
             ))}
 
             {/* Total Row */}
-            <tr className="text-center font-bold bg-slate-200 border-t-2 border-slate-900 text-slate-950">
-              <td colSpan={2} className="p-1.5 border border-slate-900 text-center font-moul text-xs">
+            <tr className="text-center font-bold bg-white border-t-2 border-slate-900 text-slate-950">
+              <td colSpan={2} className="p-1.5 border border-slate-900 text-center font-moul text-xs bg-white">
                 សរុបស្រុកជើងព្រៃ
               </td>
 
               {/* 2025 Total */}
-              <td className="p-1 border border-slate-900 bg-slate-300">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.list2025Total)}
               </td>
-              <td className="p-1 border border-slate-900 bg-slate-300">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.list2025Cpp)}
               </td>
 
               {/* ចុះឈ្មោះថ្មី */}
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.newRegStartTotal)}
               </td>
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.newRegStartCpp)}
               </td>
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.newRegCurrentTotal)}
               </td>
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.newRegCurrentCpp)}
               </td>
-              <td className="p-1 border border-slate-900 bg-teal-200">
+              <td className="p-1 border border-slate-900 bg-teal-100">
                 {formatKhmerNumber(districtTotal.newRegCumulativeTotal)}
               </td>
-              <td className="p-1 border border-slate-900 bg-teal-200">
+              <td className="p-1 border border-slate-900 bg-teal-100">
                 {formatKhmerNumber(districtTotal.newRegCumulativeCpp)}
               </td>
 
               {/* លុបឈ្មោះ */}
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.deletedStartTotal)}
               </td>
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.deletedStartCpp)}
               </td>
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.deletedCurrentTotal)}
               </td>
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.deletedCurrentCpp)}
               </td>
-              <td className="p-1 border border-slate-900 bg-sky-200">
+              <td className="p-1 border border-slate-900 bg-sky-100">
                 {formatKhmerNumber(districtTotal.deletedCumulativeTotal)}
               </td>
-              <td className="p-1 border border-slate-900 bg-sky-200">
+              <td className="p-1 border border-slate-900 bg-sky-100">
                 {formatKhmerNumber(districtTotal.deletedCumulativeCpp)}
               </td>
 
               {/* កែទិន្នន័យ */}
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.bioCorrectionStartTotal)}
               </td>
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.bioCorrectionStartCpp)}
               </td>
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.bioCorrectionCurrentTotal)}
               </td>
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.bioCorrectionCurrentCpp)}
               </td>
-              <td className="p-1 border border-slate-900 bg-amber-200">
+              <td className="p-1 border border-slate-900 bg-amber-100">
                 {formatKhmerNumber(districtTotal.bioCorrectionCumulativeTotal)}
               </td>
-              <td className="p-1 border border-slate-900 bg-amber-200">
+              <td className="p-1 border border-slate-900 bg-amber-100">
                 {formatKhmerNumber(districtTotal.bioCorrectionCumulativeCpp)}
               </td>
 
               {/* ជីវមាត្រ */}
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.biometricStartTotal)}
               </td>
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.biometricStartCpp)}
               </td>
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.biometricCurrentTotal)}
               </td>
-              <td className="p-1 border border-slate-900">
+              <td className="p-1 border border-slate-900 bg-white">
                 {formatKhmerNumber(districtTotal.biometricCurrentCpp)}
               </td>
-              <td className="p-1 border border-slate-900 bg-purple-200">
+              <td className="p-1 border border-slate-900 bg-purple-100">
                 {formatKhmerNumber(districtTotal.biometricCumulativeTotal)}
               </td>
-              <td className="p-1 border border-slate-900 bg-purple-200">
+              <td className="p-1 border border-slate-900 bg-purple-100">
                 {formatKhmerNumber(districtTotal.biometricCumulativeCpp)}
               </td>
 
               {/* 2026 */}
-              <td className="p-1 border border-slate-900 bg-slate-300">
+              <td className="p-1 border border-slate-900 bg-white font-bold">
                 {formatKhmerNumber(districtTotal.list2026Total)}
               </td>
-              <td className="p-1 border border-slate-900 bg-slate-300">
+              <td className="p-1 border border-slate-900 bg-white font-bold text-blue-900">
                 {formatKhmerNumber(districtTotal.list2026Cpp)}
               </td>
             </tr>

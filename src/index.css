@@ -89,6 +89,25 @@
     border: none !important;
     box-shadow: none !important;
     background: #ffffff !important;
+    background-color: #ffffff !important;
+  }
+
+  /* Ensure sheet container and all elements have white background (no grey background in PDF export) */
+  #official-document-sheet * {
+    background-color: transparent !important;
+  }
+
+  /* Keep delicate pastel tint on category summary headers and totals, but ensure no grey wash/background */
+  #official-document-sheet thead tr.bg-slate-100 {
+    background-color: #f8fafc !important;
+  }
+
+  #official-document-sheet thead th.bg-slate-200,
+  #official-document-sheet thead th.bg-slate-50,
+  #official-document-sheet tr.bg-slate-200,
+  #official-document-sheet td.bg-slate-100,
+  #official-document-sheet td.bg-slate-300 {
+    background-color: #ffffff !important;
   }
 
   /* Scale 30-column table to fit A4 Landscape neatly */
@@ -98,6 +117,7 @@
     font-size: 7.5pt !important;
     line-height: 1.15 !important;
     page-break-inside: auto;
+    background-color: #ffffff !important;
   }
 
   #official-document-sheet th,

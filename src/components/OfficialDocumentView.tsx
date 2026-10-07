@@ -16,7 +16,7 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
   onBackToGrid,
 }) => {
   const handlePrint = () => {
-    printSheetContentOnly();
+    printSheetContentOnly(metadata);
   };
 
   const handleExportCSV = () => {
@@ -24,7 +24,7 @@ export const OfficialDocumentView: React.FC<OfficialDocumentViewProps> = ({
   };
 
   const handleExportHTML = () => {
-    exportSheetToStandaloneHTML('official-document-sheet');
+    exportSheetToStandaloneHTML('official-document-sheet', metadata);
   };
 
   return (
