@@ -43,9 +43,17 @@
     margin: 5mm;
   }
 
+  *,
+  *::before,
+  *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
   html,
   body {
     background: #ffffff !important;
+    background-color: #ffffff !important;
     color: #000000 !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -69,16 +77,17 @@
     display: none !important;
   }
 
-  /* Remove overflow clipping on layout containers */
+  /* Remove overflow clipping and grey backgrounds on all parent layout containers */
   #root,
   main,
   div {
     overflow: visible !important;
     height: auto !important;
     max-height: none !important;
+    background-color: transparent !important;
   }
 
-  /* Display the official document sheet cleanly in natural flow */
+  /* Display the official document sheet cleanly on pure white background */
   #official-document-sheet {
     display: block !important;
     position: static !important;
@@ -92,24 +101,6 @@
     background-color: #ffffff !important;
   }
 
-  /* Ensure sheet container and all elements have white background (no grey background in PDF export) */
-  #official-document-sheet * {
-    background-color: transparent !important;
-  }
-
-  /* Keep delicate pastel tint on category summary headers and totals, but ensure no grey wash/background */
-  #official-document-sheet thead tr.bg-slate-100 {
-    background-color: #f8fafc !important;
-  }
-
-  #official-document-sheet thead th.bg-slate-200,
-  #official-document-sheet thead th.bg-slate-50,
-  #official-document-sheet tr.bg-slate-200,
-  #official-document-sheet td.bg-slate-100,
-  #official-document-sheet td.bg-slate-300 {
-    background-color: #ffffff !important;
-  }
-
   /* Scale 30-column table to fit A4 Landscape neatly */
   #official-document-sheet table {
     width: 100% !important;
@@ -117,6 +108,7 @@
     font-size: 7.5pt !important;
     line-height: 1.15 !important;
     page-break-inside: auto;
+    background: #ffffff !important;
     background-color: #ffffff !important;
   }
 
@@ -124,6 +116,28 @@
   #official-document-sheet td {
     padding: 1.5px 1px !important;
     border: 1px solid #000000 !important;
+    background-color: #ffffff !important;
+  }
+
+  /* Keep delicate, distinct pastel tint for category highlights if needed */
+  #official-document-sheet .bg-teal-50,
+  #official-document-sheet .bg-teal-100 {
+    background-color: #f0fdfa !important;
+  }
+
+  #official-document-sheet .bg-sky-50,
+  #official-document-sheet .bg-sky-100 {
+    background-color: #f0f9ff !important;
+  }
+
+  #official-document-sheet .bg-amber-50,
+  #official-document-sheet .bg-amber-100 {
+    background-color: #fffbeb !important;
+  }
+
+  #official-document-sheet .bg-purple-50,
+  #official-document-sheet .bg-purple-100 {
+    background-color: #faf5ff !important;
   }
 
   tr {

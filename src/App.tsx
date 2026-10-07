@@ -901,7 +901,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col font-kantumruy text-slate-800">
+    <div className="min-h-screen bg-slate-100 print:bg-white flex flex-col font-kantumruy text-slate-800">
       {/* Top Header */}
       <div className="print:hidden">
         <Header
@@ -971,9 +971,9 @@ export default function App() {
         </div>
 
         {/* Scrollable Content Container */}
-        <div className="flex-1 overflow-y-auto min-h-0 flex flex-col custom-scrollbar">
+        <div className="flex-1 overflow-y-auto min-h-0 flex flex-col custom-scrollbar print:overflow-visible print:bg-white print:p-0 print:m-0">
           {/* Main App Body */}
-          <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+          <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6 print:p-0 print:m-0 print:max-w-none print:w-full print:bg-white">
         {/* Assigned Commune Link Banner (When accessing via commune-specific link) */}
         {assignedCommune && (
           <div className="bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-900 text-white p-4.5 rounded-2xl shadow-md border border-blue-600/50 flex flex-col md:flex-row md:items-center justify-between gap-4 print:hidden">
