@@ -1,0 +1,7 @@
+{
+  "name": "Commune Voter Registration Sheet Manager",
+  "description": "Collaborative Khmer voter list audit and voter registration management system synced directly with Google Sheets for real-time commune data entry.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

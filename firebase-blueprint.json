@@ -1,0 +1,74 @@
+{
+  "entities": {
+    "communeEntry": {
+      "title": "CommuneEntry",
+      "description": "Daily and cumulative voter list audit and registration results for a commune in Cheung Prey District.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number", "description": "Commune identifier 1-10" },
+        "communeNumberKh": { "type": "string", "description": "Khmer numeric numeral, e.g. ១" },
+        "communeName": { "type": "string", "description": "Official commune name, e.g. ឃុំខ្នុរដំបង" },
+        "list2025Total": { "type": "number", "description": "Total voters on 2025 list" },
+        "list2025Cpp": { "type": "number", "description": "CPP voters on 2025 list" },
+        "newRegStartTotal": { "type": "number", "description": "New registration base starting total" },
+        "newRegStartCpp": { "type": "number", "description": "New registration base starting CPP" },
+        "newRegCurrentTotal": { "type": "number", "description": "New registration today total" },
+        "newRegCurrentCpp": { "type": "number", "description": "New registration today CPP" },
+        "newRegCumulativeTotal": { "type": "number", "description": "New registration cumulative total" },
+        "newRegCumulativeCpp": { "type": "number", "description": "New registration cumulative CPP" },
+        "deletedStartTotal": { "type": "number", "description": "Deleted starting total" },
+        "deletedStartCpp": { "type": "number", "description": "Deleted starting CPP" },
+        "deletedCurrentTotal": { "type": "number", "description": "Deleted today total" },
+        "deletedCurrentCpp": { "type": "number", "description": "Deleted today CPP" },
+        "deletedCumulativeTotal": { "type": "number", "description": "Deleted cumulative total" },
+        "deletedCumulativeCpp": { "type": "number", "description": "Deleted cumulative CPP" },
+        "bioCorrectionStartTotal": { "type": "number", "description": "Biodata correction starting total" },
+        "bioCorrectionStartCpp": { "type": "number", "description": "Biodata correction starting CPP" },
+        "bioCorrectionCurrentTotal": { "type": "number", "description": "Biodata correction today total" },
+        "bioCorrectionCurrentCpp": { "type": "number", "description": "Biodata correction today CPP" },
+        "bioCorrectionCumulativeTotal": { "type": "number", "description": "Biodata correction cumulative total" },
+        "bioCorrectionCumulativeCpp": { "type": "number", "description": "Biodata correction cumulative CPP" },
+        "biometricStartTotal": { "type": "number", "description": "Biometric update starting total" },
+        "biometricStartCpp": { "type": "number", "description": "Biometric update starting CPP" },
+        "biometricCurrentTotal": { "type": "number", "description": "Biometric update today total" },
+        "biometricCurrentCpp": { "type": "number", "description": "Biometric update today CPP" },
+        "biometricCumulativeTotal": { "type": "number", "description": "Biometric update cumulative total" },
+        "biometricCumulativeCpp": { "type": "number", "description": "Biometric update cumulative CPP" },
+        "list2026Total": { "type": "number", "description": "Calculated 2026 voter list total" },
+        "list2026Cpp": { "type": "number", "description": "Calculated 2026 voter list CPP" },
+        "lastUpdated": { "type": "string", "description": "ISO timestamp of last update" },
+        "updatedBy": { "type": "string", "description": "Email or identifier of updater" }
+      },
+      "required": ["id", "communeName", "communeNumberKh"]
+    },
+    "districtSettings": {
+      "title": "DistrictSettings",
+      "description": "District-level metadata, date, and connected Google Sheet information.",
+      "type": "object",
+      "properties": {
+        "provinceKh": { "type": "string" },
+        "districtKh": { "type": "string" },
+        "reportTitleKh": { "type": "string" },
+        "reportDateKh": { "type": "string" },
+        "spreadsheetId": { "type": "string" },
+        "spreadsheetUrl": { "type": "string" },
+        "signerLeftTitle": { "type": "string" },
+        "signerLeftName": { "type": "string" },
+        "signerRightDateLocation": { "type": "string" },
+        "signerRightTitle": { "type": "string" },
+        "signerRightName": { "type": "string" },
+        "lastSyncedAt": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/communes/{communeId}": {
+      "schema": "communeEntry",
+      "description": "Commune voter data document keyed by communeId (1 to 10)"
+    },
+    "/settings/district": {
+      "schema": "districtSettings",
+      "description": "Global district report parameters and Google Sheet link"
+    }
+  }
+}

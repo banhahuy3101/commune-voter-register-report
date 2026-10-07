@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow public or authenticated read and write to commune records and settings
+    match /communes/{communeId} {
+      allow read, write: if true;
+    }
+    match /settings/{settingId} {
+      allow read, write: if true;
+    }
+    match /monthly_records/{recordId} {
+      allow read, write: if true;
+    }
+  }
+}
