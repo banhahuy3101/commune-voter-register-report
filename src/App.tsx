@@ -190,7 +190,24 @@ export default function App() {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const todayReportKh = formatReportDateKh(new Date());
+          const todaySignerLoc = getSignerDateLocation(todayReportKh, 'ស្រុកជើងព្រៃ');
+          return parsed.map((m, idx) => {
+            if (
+              idx === 0 &&
+              (m.reportDateKh === 'ប្រចាំថ្ងៃទី ៧ ខែ តុលា ឆ្នាំ ២០២៦' ||
+                m.reportDateKh === 'ប្រចាំថ្ងៃទី ០៧ ខែតុលា ឆ្នាំ២០២៦')
+            ) {
+              return {
+                ...m,
+                reportDateKh: todayReportKh,
+                signerRightDateLocation: todaySignerLoc,
+              };
+            }
+            return m;
+          });
+        }
       } catch (e) {
         console.error(e);
       }
@@ -198,10 +215,10 @@ export default function App() {
     return DEFAULT_INITIAL_MONTHS;
   });
 
+  // Always reset activeMonthId to today / current month on refresh
   const [activeMonthId, setActiveMonthId] = useState<string>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY_ACTIVE_MONTH);
-    if (saved) return saved;
-    return 'month-2026-10';
+    localStorage.removeItem(STORAGE_KEY_ACTIVE_MONTH);
+    return DEFAULT_INITIAL_MONTHS[0].id;
   });
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -282,7 +299,23 @@ export default function App() {
     const unsubscribeMonths = subscribeToMonthlyRecords(
       (records) => {
         if (records && records.length > 0) {
-          setMonths(records);
+          const todayReportKh = formatReportDateKh(new Date());
+          const todaySignerLoc = getSignerDateLocation(todayReportKh, 'ស្រុកជើងព្រៃ');
+          const sanitized = records.map((m, idx) => {
+            if (
+              idx === 0 &&
+              (m.reportDateKh === 'ប្រចាំថ្ងៃទី ៧ ខែ តុលា ឆ្នាំ ២០២៦' ||
+                m.reportDateKh === 'ប្រចាំថ្ងៃទី ០៧ ខែតុលា ឆ្នាំ២០២៦')
+            ) {
+              return {
+                ...m,
+                reportDateKh: todayReportKh,
+                signerRightDateLocation: todaySignerLoc,
+              };
+            }
+            return m;
+          });
+          setMonths(sanitized);
         } else {
           // Seed default months in Firestore if empty
           DEFAULT_INITIAL_MONTHS.forEach((m) => {
@@ -361,9 +394,10 @@ export default function App() {
     localStorage.setItem(STORAGE_KEY_MONTHS, JSON.stringify(months));
   }, [months]);
 
+  // Reset active month on page load to today
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_ACTIVE_MONTH, activeMonthId);
-  }, [activeMonthId]);
+    localStorage.removeItem(STORAGE_KEY_ACTIVE_MONTH);
+  }, []);
 
   // Synchronize browser document title with report title and date before printing (Ctrl+P / Menu)
   useEffect(() => {
