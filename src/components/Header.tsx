@@ -207,12 +207,14 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
               <DatePicker
                 value={metadata.reportDateKh}
-                onChange={(formattedKh) =>
+                onChange={(formattedKh) => {
+                  const loc = metadata.districtKh ? metadata.districtKh.replace(/^ស្រុក\s*/, '').trim() : 'ជើងព្រៃ';
+                  const datePart = formattedKh.replace(/^ប្រចាំ\s*/, '').trim();
                   onUpdateMetadata({
                     reportDateKh: formattedKh,
-                    signerRightDateLocation: `ជើងព្រៃ ${formattedKh.replace('ប្រចាំ', '').trim()}`,
-                  })
-                }
+                    signerRightDateLocation: `${loc} ${datePart}`,
+                  });
+                }}
                 title="កាលបរិច្ឆេទរបាយការណ៍ (Report Date) - ជ្រើសរើសពីប្រតិទិន Date Picker"
               />
             </div>

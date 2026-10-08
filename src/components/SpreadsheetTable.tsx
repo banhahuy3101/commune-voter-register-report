@@ -10,6 +10,7 @@ import {
   SIGNATURE_CHHAY_VANNSY_BASE64,
   SIGNATURE_SIM_LEAKH_BASE64,
 } from '../constants/signatures';
+import { getSignerDateLocation } from '../utils/khmerDate';
 import { Edit3, Check, Calculator, Filter, ArrowUpDown, Lock, Sparkles, Calendar } from 'lucide-react';
 
 interface SpreadsheetTableProps {
@@ -609,7 +610,11 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
         {/* Right Signer */}
         <div className="space-y-1 font-moul w-64 flex flex-col items-center">
           <div className="text-slate-800 text-xs font-normal">
-            {metadata?.signerRightDateLocation || 'ជើងព្រៃ ថ្ងៃទី ៧ ខែតុលា ឆ្នាំ២០២៦'}
+            {getSignerDateLocation(
+              metadata?.reportDateKh || reportDateKh,
+              metadata?.districtKh,
+              metadata?.signerRightDateLocation
+            )}
           </div>
           <div className="text-slate-900 font-normal">អ្នកធ្វើតារាង</div>
 

@@ -9,6 +9,7 @@ import {
   SIGNATURE_CHHAY_VANNSY_BASE64,
   SIGNATURE_SIM_LEAKH_BASE64,
 } from '../constants/signatures';
+import { getSignerDateLocation } from '../utils/khmerDate';
 
 interface OfficialDocumentSheetProps {
   data: CommuneEntry[];
@@ -24,6 +25,11 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
   className = '',
 }) => {
   const districtTotal = calculateDistrictTotal(data);
+  const signerDateLocation = getSignerDateLocation(
+    metadata.reportDateKh,
+    metadata.districtKh,
+    metadata.signerRightDateLocation
+  );
 
   return (
     <div
@@ -426,9 +432,9 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
 
         {/* Right Signer */}
         <div className="w-64 flex flex-col items-center">
-          {/* Date / Location */}
+          {/* Date / Location - Dynamic following selected date */}
           <div className="text-slate-800 text-xs font-normal leading-tight">
-            {metadata.signerRightDateLocation || 'ជើងព្រៃ ថ្ងៃទី ៧ ខែតុលា ឆ្នាំ២០២៦'}
+            {signerDateLocation}
           </div>
 
           {/* Title Block */}

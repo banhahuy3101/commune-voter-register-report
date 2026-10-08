@@ -51,6 +51,7 @@ import { ConfirmationModal } from './components/ConfirmationModal';
 import { OAuthHelpModal } from './components/OAuthHelpModal';
 import { AdminPinModal } from './components/AdminPinModal';
 import { printSheetContentOnly, exportSheetToCSV } from './utils/exportSheet';
+import { formatReportDateKh, getSignerDateLocation } from './utils/khmerDate';
 import {
   FileSpreadsheet,
   Users,
@@ -72,15 +73,19 @@ const STORAGE_KEY_DATA = 'khmer_voter_sheet_data_v1';
 const STORAGE_KEY_MONTHS = 'khmer_voter_monthly_records_v1';
 const STORAGE_KEY_ACTIVE_MONTH = 'khmer_voter_active_month_v1';
 
+const TODAY = new Date();
+const TODAY_REPORT_DATE_KH = formatReportDateKh(TODAY);
+const TODAY_SIGNER_DATE_LOCATION = getSignerDateLocation(TODAY_REPORT_DATE_KH, 'ស្រុកជើងព្រៃ');
+
 const DEFAULT_INITIAL_MONTHS: MonthlyRecord[] = [
   {
     id: 'month-2026-10',
     monthName: 'ខែតុលា ឆ្នាំ២០២៦',
-    reportDateKh: 'ប្រចាំថ្ងៃទី ៧ ខែ តុលា ឆ្នាំ ២០២៦',
-    signerRightDateLocation: 'ជើងព្រៃ ថ្ងៃទី ៧ ខែតុលា ឆ្នាំ២០២៦',
+    reportDateKh: TODAY_REPORT_DATE_KH,
+    signerRightDateLocation: TODAY_SIGNER_DATE_LOCATION,
     communes: INITIAL_COMMUNES_DATA.map((row) => calculateRowFormulas(row)),
-    createdAt: '2026-10-07T00:00:00.000Z',
-    updatedAt: new Date().toISOString(),
+    createdAt: TODAY.toISOString(),
+    updatedAt: TODAY.toISOString(),
   },
   {
     id: 'month-2026-09',
@@ -112,15 +117,19 @@ export default function App() {
 
   // Sheet & Commune Data State
   const [metadata, setMetadata] = useState<SheetMetadata>(() => {
+    const today = new Date();
+    const todayReportDateKh = formatReportDateKh(today);
+    const todaySignerLocation = getSignerDateLocation(todayReportDateKh, 'ស្រុកជើងព្រៃ');
+
     const defaults: SheetMetadata = {
       provinceKh: 'ខេត្តកំពង់ចាម',
       districtKh: 'ស្រុកជើងព្រៃ',
       logoUrl: '/cpp-logo.png',
       reportTitleKh: 'លទ្ធផលនៃការពិនិត្យបញ្ជីឈ្មោះ និងការចុះឈ្មោះបោះឆ្នោត ឆ្នាំ ២០២៦',
-      reportDateKh: 'ប្រចាំថ្ងៃទី ៧ ខែ តុលា ឆ្នាំ ២០២៦',
+      reportDateKh: todayReportDateKh,
       signerLeftTitle: 'បានឃើញ និងឯកភាព / ជ.គណៈអចិន្ត្រៃយ៍ / អនុប្រធានប្រចាំការ',
       signerLeftName: 'ឆាយ វ៉ាន់ស៊ី',
-      signerRightDateLocation: 'ជើងព្រៃ ថ្ងៃទី ៧ ខែតុលា ឆ្នាំ២០២៦',
+      signerRightDateLocation: todaySignerLocation,
       signerRightTitle: 'អ្នកធ្វើតារាង',
       signerRightName: 'ស៊ីម ល័ក្ខ',
       adminPin: '1234',
@@ -129,14 +138,27 @@ export default function App() {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
+        // Default date must be today() unless specifically set to another custom date
+        const isOldStaticDate =
+          !parsed.reportDateKh ||
+          parsed.reportDateKh === 'ប្រចាំថ្ងៃទី ៧ ខែ តុលា ឆ្នាំ ២០២៦' ||
+          parsed.reportDateKh === 'ប្រចាំថ្ងៃទី ០៧ ខែតុលា ឆ្នាំ២០២៦';
+        const finalReportDateKh = isOldStaticDate ? todayReportDateKh : parsed.reportDateKh;
+        const finalSignerDateLocation = getSignerDateLocation(
+          finalReportDateKh,
+          defaults.districtKh,
+          parsed.signerRightDateLocation
+        );
+
         return {
           ...defaults,
           ...parsed,
+          reportDateKh: finalReportDateKh,
+          signerRightDateLocation: finalSignerDateLocation,
           adminPin: parsed.adminPin || defaults.adminPin,
           logoUrl: defaults.logoUrl,
           signerLeftTitle: defaults.signerLeftTitle,
           signerLeftName: defaults.signerLeftName,
-          signerRightDateLocation: defaults.signerRightDateLocation,
           signerRightTitle: defaults.signerRightTitle,
           signerRightName: defaults.signerRightName,
         };
@@ -242,7 +264,17 @@ export default function App() {
     // 2. Subscribe to District Settings
     const unsubscribeSettings = subscribeToDistrictSettings((savedSettings) => {
       if (savedSettings) {
-        setMetadata((prev) => ({ ...prev, ...savedSettings }));
+        setMetadata((prev) => {
+          const isOldStaticDate =
+            savedSettings.reportDateKh === 'ប្រចាំថ្ងៃទី ៧ ខែ តុលា ឆ្នាំ ២០២៦' ||
+            savedSettings.reportDateKh === 'ប្រចាំថ្ងៃទី ០៧ ខែតុលា ឆ្នាំ២០២៦';
+          const merged = { ...prev, ...savedSettings };
+          if (isOldStaticDate && prev.reportDateKh) {
+            merged.reportDateKh = prev.reportDateKh;
+            merged.signerRightDateLocation = prev.signerRightDateLocation;
+          }
+          return merged;
+        });
       }
     });
 
@@ -914,7 +946,14 @@ export default function App() {
           onLogin={handleLogin}
           onLogout={handleLogout}
           metadata={metadata}
-          onUpdateMetadata={(m) => setMetadata((prev) => ({ ...prev, ...m }))}
+          onUpdateMetadata={(m) => {
+            setMetadata((prev) => {
+              const next = { ...prev, ...m };
+              localStorage.setItem(STORAGE_KEY_METADATA, JSON.stringify(next));
+              saveDistrictSettingsToFirestore(next).catch(console.warn);
+              return next;
+            });
+          }}
           onCreateSheet={handleRequestCreateSheet}
           onSyncToSheet={handleRequestSyncToSheet}
           onFetchFromSheet={handleFetchFromSheet}

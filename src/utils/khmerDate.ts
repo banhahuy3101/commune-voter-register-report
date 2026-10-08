@@ -105,3 +105,24 @@ export function parseReportDateKh(str?: string): Date | undefined {
 
   return undefined;
 }
+
+/**
+ * Derives the signer location & date string dynamically following the selected report date
+ * e.g. "ជើងព្រៃ ថ្ងៃទី ៧ ខែ តុលា ឆ្នាំ ២០២៦"
+ */
+export function getSignerDateLocation(
+  reportDateKh?: string,
+  districtKh?: string,
+  fallback?: string
+): string {
+  const loc = districtKh ? districtKh.replace(/^ស្រុក\s*/, '').trim() : 'ជើងព្រៃ';
+  if (!reportDateKh || typeof reportDateKh !== 'string') {
+    return fallback || `${loc} ថ្ងៃទី ៧ ខែតុលា ឆ្នាំ២០២៦`;
+  }
+  const datePart = reportDateKh.replace(/^ប្រចាំ\s*/, '').trim();
+  if (datePart) {
+    return `${loc} ${datePart}`;
+  }
+  return fallback || `${loc} ថ្ងៃទី ៧ ខែតុលា ឆ្នាំ២០២៦`;
+}
+

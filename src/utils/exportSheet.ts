@@ -1,4 +1,5 @@
 import { CommuneEntry, SheetMetadata, calculateDistrictTotal } from '../types/sheet';
+import { getSignerDateLocation } from './khmerDate';
 
 /**
  * Triggers native clean browser print preview with document title matching report title and date
@@ -166,7 +167,7 @@ export const exportSheetToCSV = (data: CommuneEntry[], metadata: SheetMetadata) 
     '',
     '',
     '',
-    metadata.signerRightDateLocation || 'ជើងព្រៃ',
+    getSignerDateLocation(metadata.reportDateKh, metadata.districtKh, metadata.signerRightDateLocation),
   ]);
   rows.push(['', '', '', '', 'អ្នកធ្វើតារាង']);
   rows.push([metadata.signerLeftName || 'ឆាយ វ៉ាន់ស៊ី', '', '', '', metadata.signerRightName || 'ស៊ីម ល័ក្ខ']);
