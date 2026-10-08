@@ -84,7 +84,7 @@ export const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
               <Users className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base font-semibold">បញ្ជីអ្នកសហការ Google Sheet (Share List)</h2>
+              <h2 className="text-base font-normal">បញ្ជីអ្នកសហការ Google Sheet (Share List)</h2>
               <p className="text-xs text-slate-400">
                 អនុញ្ញាតឱ្យតំណាងតាមឃុំនីមួយៗចូលបំពេញទិន្នន័យជាក់ស្ដែង Real-Time
               </p>
@@ -103,7 +103,7 @@ export const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
           {spreadsheetUrl && (
             <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 flex items-center justify-between gap-3">
               <div className="truncate text-xs text-slate-600">
-                <span className="font-semibold text-slate-800 block mb-0.5">
+                <span className="font-normal text-slate-800 block mb-0.5">
                   តំណភ្ជាប់ Google Sheet សម្រាប់ផ្ញើតាម Telegram/Email៖
                 </span>
                 <span className="truncate block font-mono text-[11px] text-slate-500">
@@ -114,7 +114,7 @@ export const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
                 <button
                   type="button"
                   onClick={handleCopyLink}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer shadow-2xs"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-normal text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer shadow-2xs"
                 >
                   {copiedLink ? (
                     <>
@@ -142,7 +142,7 @@ export const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
 
           {/* Add Collaborator Form */}
           <form onSubmit={handleShare} className="space-y-3 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
-            <h3 className="text-xs font-bold text-blue-950 uppercase tracking-wider flex items-center gap-1.5">
+            <h3 className="text-xs font-normal text-blue-950 uppercase tracking-wider flex items-center gap-1.5">
               <UserPlus className="w-4 h-4 text-blue-600" />
               បន្ថែមអ្នកទទួលបន្ទុកតាមឃុំ (Add Commune Officer)
             </h3>
@@ -233,7 +233,7 @@ export const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
             <div className="flex items-center gap-2">
               <Globe className="w-4 h-4 text-slate-500" />
               <div>
-                <div className="font-semibold text-slate-800 text-xs">
+                <div className="font-normal text-slate-800 text-xs">
                   សិទ្ធិតាមតំណភ្ជាប់សាធារណៈ (Link Sharing)
                 </div>
                 <div className="text-[11px] text-slate-500">
@@ -252,7 +252,7 @@ export const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
 
           {/* Active Collaborators List */}
           <div>
-            <h4 className="font-semibold text-slate-800 text-xs mb-2">
+            <h4 className="font-normal text-slate-800 text-xs mb-2">
               បញ្ជីអ្នកមានសិទ្ធិចូលប្រើប្រាស់ ({collaborators.length})
             </h4>
             <div className="border border-slate-200 rounded-xl divide-y divide-slate-100 overflow-hidden bg-white">
@@ -267,12 +267,12 @@ export const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
                       {c.photoLink ? (
                         <img src={c.photoLink} alt={c.displayName} className="w-7 h-7 rounded-full" />
                       ) : (
-                        <div className="w-7 h-7 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-xs">
+                        <div className="w-7 h-7 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-normal text-xs">
                           {(c.displayName || c.emailAddress || 'U')[0].toUpperCase()}
                         </div>
                       )}
                       <div className="truncate">
-                        <div className="font-semibold text-slate-800 text-xs truncate">
+                        <div className="font-normal text-slate-800 text-xs truncate">
                           {c.displayName}
                         </div>
                         <div className="text-[11px] text-slate-500 truncate">{c.emailAddress}</div>
@@ -281,7 +281,7 @@ export const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
 
                     <div className="flex items-center gap-2">
                       <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${
+                        className={`px-2 py-0.5 rounded text-[10px] font-normal uppercase ${
                           c.role === 'owner'
                             ? 'bg-amber-100 text-amber-800'
                             : c.role === 'writer'

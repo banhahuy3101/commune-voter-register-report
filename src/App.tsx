@@ -49,6 +49,8 @@ import { OfficialDocumentView } from './components/OfficialDocumentView';
 import { OfficialDocumentSheet } from './components/OfficialDocumentSheet';
 import { ConfirmationModal } from './components/ConfirmationModal';
 import { OAuthHelpModal } from './components/OAuthHelpModal';
+import { AdminPinModal } from './components/AdminPinModal';
+import { printSheetContentOnly, exportSheetToCSV } from './utils/exportSheet';
 import {
   FileSpreadsheet,
   Users,
@@ -121,6 +123,7 @@ export default function App() {
       signerRightDateLocation: 'ជើងព្រៃ ថ្ងៃទី ៧ ខែតុលា ឆ្នាំ២០២៦',
       signerRightTitle: 'អ្នកធ្វើតារាង',
       signerRightName: 'ស៊ីម ល័ក្ខ',
+      adminPin: '1234',
     };
     const saved = localStorage.getItem(STORAGE_KEY_METADATA);
     if (saved) {
@@ -129,6 +132,7 @@ export default function App() {
         return {
           ...defaults,
           ...parsed,
+          adminPin: parsed.adminPin || defaults.adminPin,
           logoUrl: defaults.logoUrl,
           signerLeftTitle: defaults.signerLeftTitle,
           signerLeftName: defaults.signerLeftName,
@@ -209,6 +213,7 @@ export default function App() {
   const [successBanner, setSuccessBanner] = useState<string | null>(null);
   const [isFirebaseLive, setIsFirebaseLive] = useState(false);
   const [isOAuthHelpOpen, setIsOAuthHelpOpen] = useState(false);
+  const [isAdminPinModalOpen, setIsAdminPinModalOpen] = useState(false);
   const [blockedEmail, setBlockedEmail] = useState('banha.fake@gmail.com');
 
   // Assigned commune object
@@ -277,7 +282,7 @@ export default function App() {
     isOpen: false,
     title: '',
     message: '',
-    onConfirm: () => {},
+    onConfirm: () => { },
   });
 
   // Check URL parameters on mount for direct commune popup & commune link locking
@@ -932,6 +937,8 @@ export default function App() {
           monthsCount={months.length}
           activeMonthName={activeMonth?.monthName}
           onOpenOAuthHelp={() => setIsOAuthHelpOpen(true)}
+          onPrintDocument={() => printSheetContentOnly(metadata)}
+          onExportExcel={() => exportSheetToCSV(communes, metadata)}
         />
       </div>
 
@@ -974,287 +981,273 @@ export default function App() {
         <div className="flex-1 overflow-y-auto min-h-0 flex flex-col custom-scrollbar print:overflow-visible print:bg-white print:p-0 print:m-0">
           {/* Main App Body */}
           <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6 print:p-0 print:m-0 print:max-w-none print:w-full print:bg-white">
-        {/* Assigned Commune Link Banner (When accessing via commune-specific link) */}
-        {assignedCommune && (
-          <div className="bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-900 text-white p-4.5 rounded-2xl shadow-md border border-blue-600/50 flex flex-col md:flex-row md:items-center justify-between gap-4 print:hidden">
-            <div className="flex items-start sm:items-center gap-3.5">
-              <div className="p-3 bg-amber-400 text-slate-950 rounded-xl shadow-xs shrink-0">
-                <Lock className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-bold text-amber-300 uppercase tracking-wider">
-                    តំណភ្ជាប់ផ្លូវការតាមឃុំ (Assigned Commune Portal)
-                  </span>
-                  <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] px-2 py-0.5 rounded-full font-semibold">
-                    🔒 សុវត្ថិភាពចាក់សោ
-                  </span>
-                </div>
-                <h3 className="text-base md:text-lg font-bold font-moul text-white mt-0.5">
-                  ឃុំរបស់អ្នក៖ {assignedCommune.communeNumberKh}. {assignedCommune.communeName}
-                </h3>
-                <p className="text-xs text-slate-300 mt-0.5 leading-relaxed">
-                  🔒 លោកអ្នកត្រូវបានកំណត់សិទ្ធិកែប្រែទិន្នន័យបានតែក្នុងជួរដេក <strong>{assignedCommune.communeName}</strong> ប៉ុណ្ណោះ។ ឃុំផ្សេងទៀតក្នុងតារាងត្រូវបានចាក់សោ (Read-Only) ដើម្បីការពារការច្រឡំទិន្នន័យ។
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5 shrink-0 self-start md:self-center">
-              <button
-                onClick={() => {
-                  setActiveCommuneId(assignedCommune.id);
-                  setIsCommunePopupOpen(true);
-                }}
-                className="flex items-center gap-1.5 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer"
-              >
-                <Edit3 className="w-4 h-4" />
-                <span>បើក Pop-up បំពេញ {assignedCommune.communeName}</span>
-              </button>
-
-              {/* Admin Unlock toggle if district supervisor is testing or administering */}
-              <button
-                onClick={() => {
-                  setConfirmDialog({
-                    isOpen: true,
-                    title: 'ដោះសោរបៀបមន្ត្រីស្រុក (District Admin Unlock)',
-                    message:
-                      'តើលោកអ្នកជាមន្ត្រីសម្របសម្រួលស្រុក ឬអភិបាល ដែលចង់ដោះសោដើម្បីកែប្រែគ្រប់ឃុំទាំងអស់ទាំង១០ មែនទេ?',
-                    confirmLabel: 'ដោះសោគ្រប់ឃុំ (Admin Mode)',
-                    onConfirm: () => {
-                      setLockedCommuneId(null);
-                      setConfirmDialog((prev) => ({ ...prev, isOpen: false }));
-                      setSuccessBanner('បានដោះសោជា «របៀបមន្ត្រីស្រុក» រួចរាល់! លោកអ្នកអាចកែប្រែគ្រប់ឃុំទាំង១០។');
-                      setTimeout(() => setSuccessBanner(null), 4000);
-                    },
-                  });
-                }}
-                className="text-[11px] text-slate-300 hover:text-white px-2.5 py-2 rounded-lg border border-slate-700 hover:border-slate-500 transition-colors cursor-pointer"
-                title="សម្រាប់មន្ត្រីស្រុកកែប្រែគ្រប់ឃុំ"
-              >
-                ដោះសោ (Admin)
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Intro Info Banner if Sheet is not yet connected */}
-        {!metadata.spreadsheetId && !assignedCommune && (
-          <div className="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-2xl p-6 shadow-md border border-blue-800 flex flex-col md:flex-row md:items-center justify-between gap-6 print:hidden">
-            <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-400 text-blue-950">
-                <FileSpreadsheet className="w-3.5 h-3.5" />
-                ភ្ជាប់ផ្ទាល់ជាមួយ Google Sheets
-              </div>
-              <h2 className="text-lg md:text-xl font-bold font-moul text-white">
-                តារាងពិនិត្យបញ្ជីឈ្មោះ និងចុះឈ្មោះបោះឆ្នោត ឆ្នាំ ២០២៦
-              </h2>
-              <p className="text-xs md:text-sm text-blue-100 leading-relaxed">
-                លោកអ្នកអាចបញ្ចូលទិន្នន័យដោយផ្ទាល់ក្នុងក្រឡានីមួយៗ (Cell required) តាមឃុំទាំង១០ នៃស្រុកជើងព្រៃ។
-                ចុចប៊ូតុង <span className="font-semibold text-amber-300">«បង្កើត Google Sheet ថ្មី»</span> ដើម្បីនាំចេញតារាងផ្លូវការនេះទៅកាន់ Google Drive
-                និងចែករំលែកឱ្យមន្ត្រីតាមឃុំចូលបំពេញរួមគ្នាក្នុង Real-Time!
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
-              <button
-                onClick={() => setIsCommunePopupOpen(true)}
-                className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md transition-all cursor-pointer text-sm"
-              >
-                <Edit3 className="w-4 h-4" />
-                <span>បញ្ចូលទិន្នន័យតាមឃុំ (Pop-up)</span>
-              </button>
-
-              <button
-                onClick={handleRequestCreateSheet}
-                disabled={isCreating}
-                className="flex items-center justify-center gap-2 px-5 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl shadow-lg transition-all cursor-pointer text-sm"
-              >
-                <FileSpreadsheet className="w-4 h-4" />
-                <span>{isCreating ? 'កំពុងបង្កើត Sheet...' : 'បង្កើត Google Sheet ឥឡូវនេះ'}</span>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* View Switching: Official Print Document vs Interactive Spreadsheet Grid */}
-        {isOfficialView ? (
-          <OfficialDocumentView
-            data={communes}
-            metadata={metadata}
-            onBackToGrid={() => setIsOfficialView(false)}
-          />
-        ) : (
-          <>
-            {/* When in Grid view, render isolated official document sheet for browser print (Ctrl+P / Menu) */}
-            <div className="hidden print:block">
-              <OfficialDocumentSheet
-                id="official-document-sheet"
-                data={communes}
-                metadata={metadata}
-              />
-            </div>
-
-            <div className="space-y-4 print:hidden">
-            {/* Quick Actions Bar for Commune Clerks */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {/* Card 1: Commune Quick Selector & Pop-up Trigger */}
-              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className={`p-2.5 rounded-xl ${assignedCommune ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>
-                    {assignedCommune ? <Lock className="w-5 h-5" /> : <Building2 className="w-5 h-5" />}
+            {/* Assigned Commune Link Banner (When accessing via commune-specific link) */}
+            {assignedCommune && (
+              <div className="bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-900 text-white p-4.5 rounded-2xl shadow-md border border-blue-600/50 flex flex-col md:flex-row md:items-center justify-between gap-4 print:hidden">
+                <div className="flex items-start sm:items-center gap-3.5">
+                  <div className="p-3 bg-amber-400 text-slate-950 rounded-xl shadow-xs shrink-0">
+                    <Lock className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-500 font-medium">
-                      {assignedCommune ? 'ឃុំរបស់អ្នក (បានចាក់សោ)' : 'ជ្រើសរើសឃុំបំពេញ'}
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-xs font-normal text-amber-300 uppercase tracking-wider">
+                        តំណភ្ជាប់ផ្លូវការតាមឃុំ (Assigned Commune Portal)
+                      </span>
+                      <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] px-2 py-0.5 rounded-full font-normal">
+                        🔒 សុវត្ថិភាពចាក់សោ
+                      </span>
                     </div>
-                    <div className="text-sm font-bold text-slate-800">
-                      {assignedCommune
-                        ? assignedCommune.communeName
-                        : selectedCommuneId
-                        ? communes.find((c) => c.id === selectedCommuneId)?.communeName
-                        : 'ឃុំទាំង១០ (ស្រុកជើងព្រៃ)'}
-                    </div>
+                    <h3 className="text-base md:text-lg font-normal font-moul text-white mt-0.5">
+                      ឃុំរបស់អ្នក៖ {assignedCommune.communeNumberKh}. {assignedCommune.communeName}
+                    </h3>
+                    <p className="text-xs text-slate-300 mt-0.5 leading-relaxed">
+                      🔒 លោកអ្នកត្រូវបានកំណត់សិទ្ធិកែប្រែទិន្នន័យបានតែក្នុងជួរដេក <strong>{assignedCommune.communeName}</strong> ប៉ុណ្ណោះ។ ឃុំផ្សេងទៀតក្នុងតារាងត្រូវបានចាក់សោ (Read-Only) ដើម្បីការពារការច្រឡំទិន្នន័យ។
+                    </p>
                   </div>
                 </div>
 
-                <button
-                  onClick={() => {
-                    const targetId = lockedCommuneId || selectedCommuneId || 1;
-                    setActiveCommuneId(targetId);
-                    setIsCommunePopupOpen(true);
-                  }}
-                  className="px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 cursor-pointer shadow-2xs"
-                >
-                  បើក Pop-up
-                </button>
-              </div>
-
-              {/* Card 2: Send Direct Links to Communes */}
-              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 bg-indigo-100 text-indigo-700 rounded-xl">
-                    <Send className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <div className="text-xs text-slate-500 font-medium">ផ្ញើតំណទៅកាន់មន្ត្រី</div>
-                    <div className="text-sm font-bold text-slate-800">តាមឃុំនីមួយៗ</div>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => setIsShareLinksModalOpen(true)}
-                  className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-semibold rounded-lg hover:bg-indigo-700 cursor-pointer shadow-2xs"
-                >
-                  ផ្ញើតំណ
-                </button>
-              </div>
-
-              {/* Card 3: Real-time Collaborators */}
-              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-xl">
-                    <Users className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <div className="text-xs text-slate-500 font-medium">អ្នកសហការ Real-Time</div>
-                    <div className="text-sm font-bold text-slate-800">
-                      {metadata.spreadsheetId
-                        ? `${collaborators.length} នាក់ក្នុងបញ្ជី Share`
-                        : 'Google Drive Share'}
-                    </div>
-                  </div>
-                </div>
-
-                {metadata.spreadsheetId && (
+                <div className="flex items-center gap-2.5 shrink-0 self-start md:self-center">
                   <button
-                    onClick={() => setIsCollaboratorsOpen(true)}
-                    className="px-3 py-1.5 bg-emerald-600 text-white text-xs font-semibold rounded-lg hover:bg-emerald-700 cursor-pointer shadow-2xs"
+                    onClick={() => {
+                      setActiveCommuneId(assignedCommune.id);
+                      setIsCommunePopupOpen(true);
+                    }}
+                    className="flex items-center gap-1.5 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-normal text-xs rounded-xl shadow-md transition-all cursor-pointer"
                   >
-                    គ្រប់គ្រង
+                    <Edit3 className="w-4 h-4" />
+                    <span>បើក Pop-up បំពេញ {assignedCommune.communeName}</span>
                   </button>
-                )}
-              </div>
 
-              {/* Card 4: Deep Link to Google Sheet */}
-              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 bg-amber-100 text-amber-700 rounded-xl">
-                    <FileSpreadsheet className="w-5 h-5" />
+                  {/* Admin Unlock toggle requiring system PIN */}
+                  <button
+                    onClick={() => setIsAdminPinModalOpen(true)}
+                    className="text-[11px] text-slate-300 hover:text-white px-2.5 py-2 rounded-lg border border-slate-700 hover:border-slate-500 transition-colors cursor-pointer"
+                    title="សម្រាប់មន្ត្រីស្រុកកែប្រែគ្រប់ឃុំ (ទាមទារ PIN)"
+                  >
+                    ដោះសោ (Admin)
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Intro Info Banner if Sheet is not yet connected */}
+            {!metadata.spreadsheetId && !assignedCommune && (
+              <div className="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-2xl p-6 shadow-md border border-blue-800 flex flex-col md:flex-row md:items-center justify-between gap-6 print:hidden">
+                <div className="space-y-2 max-w-2xl">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-normal bg-amber-400 text-blue-950">
+                    <FileSpreadsheet className="w-3.5 h-3.5" />
+                    ភ្ជាប់ផ្ទាល់ជាមួយ Google Sheets
                   </div>
-                  <div>
-                    <div className="text-xs text-slate-500 font-medium">Google Sheet ផ្ទាល់</div>
-                    <div className="text-sm font-bold text-slate-800 truncate max-w-[110px]">
-                      {metadata.spreadsheetId ? 'បានភ្ជាប់ជោគជ័យ' : 'មិនទាន់បង្កើត'}
-                    </div>
-                  </div>
+                  <h2 className="text-lg md:text-xl font-normal font-moul text-white">
+                    តារាងពិនិត្យបញ្ជីឈ្មោះ និងចុះឈ្មោះបោះឆ្នោត ឆ្នាំ ២០២៦
+                  </h2>
+                  <p className="text-xs md:text-sm text-blue-100 leading-relaxed">
+                    លោកអ្នកអាចបញ្ចូលទិន្នន័យដោយផ្ទាល់ក្នុងក្រឡានីមួយៗ (Cell required) តាមឃុំទាំង១០ នៃស្រុកជើងព្រៃ។
+                    ចុចប៊ូតុង <span className="font-normal text-amber-300">«បង្កើត Google Sheet ថ្មី»</span> ដើម្បីនាំចេញតារាងផ្លូវការនេះទៅកាន់ Google Drive
+                    និងចែករំលែកឱ្យមន្ត្រីតាមឃុំចូលបំពេញរួមគ្នាក្នុង Real-Time!
+                  </p>
                 </div>
 
-                {metadata.spreadsheetId ? (
-                  <a
-                    href={metadata.spreadsheetUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 px-3 py-1.5 bg-amber-600 text-white text-xs font-semibold rounded-lg hover:bg-amber-700"
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+                  <button
+                    onClick={() => setIsCommunePopupOpen(true)}
+                    className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-normal rounded-xl shadow-md transition-all cursor-pointer text-sm"
                   >
-                    <span>បើកមើល</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                ) : (
+                    <Edit3 className="w-4 h-4" />
+                    <span>បញ្ចូលទិន្នន័យតាមឃុំ (Pop-up)</span>
+                  </button>
+
                   <button
                     onClick={handleRequestCreateSheet}
-                    className="px-3 py-1.5 bg-slate-800 text-white text-xs font-semibold rounded-lg hover:bg-slate-900 cursor-pointer"
+                    disabled={isCreating}
+                    className="flex items-center justify-center gap-2 px-5 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-normal rounded-xl shadow-lg transition-all cursor-pointer text-sm"
                   >
-                    បង្កើត
+                    <FileSpreadsheet className="w-4 h-4" />
+                    <span>{isCreating ? 'កំពុងបង្កើត Sheet...' : 'បង្កើត Google Sheet ឥឡូវនេះ'}</span>
                   </button>
-                )}
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* The Main Spreadsheet Table */}
-            <SpreadsheetTable
-              data={communes}
-              onUpdateRow={handleUpdateRowCell}
-              onOpenQuickForm={(c) => {
-                setActiveCommuneId(c.id);
-                setIsCommunePopupOpen(true);
-              }}
-              selectedCommuneId={selectedCommuneId}
-              onSelectCommuneId={(id) => setSelectedCommuneId(id)}
-              lockedCommuneId={lockedCommuneId}
-              reportDateKh={metadata.reportDateKh}
-              metadata={metadata}
-            />
+            {/* View Switching: Official Print Document vs Interactive Spreadsheet Grid */}
+            {isOfficialView ? (
+              <OfficialDocumentView
+                data={communes}
+                metadata={metadata}
+                onBackToGrid={() => setIsOfficialView(false)}
+              />
+            ) : (
+              <>
+                {/* When in Grid view, render isolated official document sheet for browser print (Ctrl+P / Menu) */}
+                <div className="hidden print:block">
+                  <OfficialDocumentSheet
+                    id="official-document-sheet"
+                    data={communes}
+                    metadata={metadata}
+                  />
+                </div>
 
-            {/* Instructions & Help Card */}
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs text-xs space-y-2">
-              <div className="flex items-center gap-2 text-slate-800 font-bold">
-                <Info className="w-4 h-4 text-blue-600" />
-                <span>របៀបប្រើប្រាស់ និងការបំពេញទិន្នន័យតាមឃុំ (Instruction Guide):</span>
-              </div>
-              <ul className="list-disc list-inside space-y-1 text-slate-600 pl-2">
-                <li>
-                  <strong className="text-slate-800">ការផ្ញើតំណទៅកាន់មន្ត្រីឃុំ (Send to User):</strong>{' '}
-                  ចុចប៊ូតុង <span className="font-semibold text-indigo-700">«ផ្ញើតំណតាមឃុំ (Send Link)»</span> ដើម្បីចម្លងតំណភ្ជាប់ ឬផ្ញើតាម Telegram ទៅកាន់មន្ត្រីតាមឃុំនីមួយៗ។ ពេលពួកគាត់បើកតំណ ផ្ទាំង Pop-up នឹងបង្ហាញឡើងភ្លាមៗជាមួយឈ្មោះឃុំនោះ ហើយប្រព័ន្ធនឹងចាក់សោសុវត្ថិភាព ឱ្យកែប្រែបានតែឃុំរបស់គាត់ប៉ុណ្ណោះ។
-                </li>
-                <li>
-                  <strong className="text-slate-800">ការជ្រើសរើសឃុំ និងបញ្ចូលក្នុង Pop-up:</strong>{' '}
-                  ក្នុងផ្ទាំង Pop-up មន្ត្រីបញ្ចូលលេខក្នុងក្រឡាដែលត្រូវបំពេញ (Input fields) ហើយពេលចុច «រក្សាទុក» វានឹងចូលក្នុងជួរដេកនៃឃុំនោះដោយស្វ័យប្រវត្តិ។
-                </li>
-                <li>
-                  <strong className="text-slate-800">ការបំពេញផ្ទាល់ក្នុងក្រឡា (Direct Cell Input):</strong>{' '}
-                  លោកអ្នកអាចចុចកែប្រែបានតែក្នុងជួរដេកនៃឃុំរបស់អ្នកប៉ុណ្ណោះ។ ឃុំផ្សេងទៀតក្នុងតារាងគឺសម្រាប់តែមើល (Read-only) ដើម្បីការពារការកែច្រឡំ។
-                </li>
-              </ul>
-            </div>
-          </div>
-          </>
-        )}
-      </main>
+                <div className="space-y-4 print:hidden">
+                  {/* Quick Actions Bar for Commune Clerks */}
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    {/* Card 1: Commune Quick Selector & Pop-up Trigger */}
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2.5 rounded-xl ${assignedCommune ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>
+                          {assignedCommune ? <Lock className="w-5 h-5" /> : <Building2 className="w-5 h-5" />}
+                        </div>
+                        <div>
+                          <div className="text-xs text-slate-500 font-medium">
+                            {assignedCommune ? 'ឃុំរបស់អ្នក (បានចាក់សោ)' : 'ជ្រើសរើសឃុំបំពេញ'}
+                          </div>
+                          <div className="text-sm font-normal text-slate-800">
+                            {assignedCommune
+                              ? assignedCommune.communeName
+                              : selectedCommuneId
+                                ? communes.find((c) => c.id === selectedCommuneId)?.communeName
+                                : 'ឃុំទាំង១០ (ស្រុកជើងព្រៃ)'}
+                          </div>
+                        </div>
+                      </div>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-500 print:hidden">
-        គណៈកម្មាធិការស្រុកជើងព្រៃ ខេត្តកំពង់ចាម • ប្រព័ន្ធគ្រប់គ្រងការពិនិត្យបញ្ជីឈ្មោះ និងចុះឈ្មោះបោះឆ្នោត ឆ្នាំ ២០២៦
-      </footer>
+                      <button
+                        onClick={() => {
+                          const targetId = lockedCommuneId || selectedCommuneId || 1;
+                          setActiveCommuneId(targetId);
+                          setIsCommunePopupOpen(true);
+                        }}
+                        className="px-3 py-1.5 bg-blue-600 text-white text-xs font-normal rounded-lg hover:bg-blue-700 cursor-pointer shadow-2xs"
+                      >
+                        បើក Pop-up
+                      </button>
+                    </div>
+
+                    {/* Card 2: Send Direct Links to Communes */}
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-indigo-100 text-indigo-700 rounded-xl">
+                          <Send className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="text-xs text-slate-500 font-medium">ផ្ញើតំណទៅកាន់មន្ត្រី</div>
+                          <div className="text-sm font-normal text-slate-800">តាមឃុំនីមួយៗ</div>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => setIsShareLinksModalOpen(true)}
+                        className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-normal rounded-lg hover:bg-indigo-700 cursor-pointer shadow-2xs"
+                      >
+                        ផ្ញើតំណ
+                      </button>
+                    </div>
+
+                    {/* Card 3: Real-time Collaborators */}
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-xl">
+                          <Users className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="text-xs text-slate-500 font-medium">អ្នកសហការ Real-Time</div>
+                          <div className="text-sm font-normal text-slate-800">
+                            {metadata.spreadsheetId
+                              ? `${collaborators.length} នាក់ក្នុងបញ្ជី Share`
+                              : 'Google Drive Share'}
+                          </div>
+                        </div>
+                      </div>
+
+                      {metadata.spreadsheetId && (
+                        <button
+                          onClick={() => setIsCollaboratorsOpen(true)}
+                          className="px-3 py-1.5 bg-emerald-600 text-white text-xs font-normal rounded-lg hover:bg-emerald-700 cursor-pointer shadow-2xs"
+                        >
+                          គ្រប់គ្រង
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Card 4: Deep Link to Google Sheet */}
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-amber-100 text-amber-700 rounded-xl">
+                          <FileSpreadsheet className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="text-xs text-slate-500 font-medium">Google Sheet ផ្ទាល់</div>
+                          <div className="text-sm font-normal text-slate-800 truncate max-w-[110px]">
+                            {metadata.spreadsheetId ? 'បានភ្ជាប់ជោគជ័យ' : 'មិនទាន់បង្កើត'}
+                          </div>
+                        </div>
+                      </div>
+
+                      {metadata.spreadsheetId ? (
+                        <a
+                          href={metadata.spreadsheetUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 px-3 py-1.5 bg-amber-600 text-white text-xs font-normal rounded-lg hover:bg-amber-700"
+                        >
+                          <span>បើកមើល</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      ) : (
+                        <button
+                          onClick={handleRequestCreateSheet}
+                          className="px-3 py-1.5 bg-slate-800 text-white text-xs font-normal rounded-lg hover:bg-slate-900 cursor-pointer"
+                        >
+                          បង្កើត
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* The Main Spreadsheet Table */}
+                  <SpreadsheetTable
+                    data={communes}
+                    onUpdateRow={handleUpdateRowCell}
+                    onOpenQuickForm={(c) => {
+                      setActiveCommuneId(c.id);
+                      setIsCommunePopupOpen(true);
+                    }}
+                    selectedCommuneId={selectedCommuneId}
+                    onSelectCommuneId={(id) => setSelectedCommuneId(id)}
+                    lockedCommuneId={lockedCommuneId}
+                    reportDateKh={metadata.reportDateKh}
+                    metadata={metadata}
+                  />
+
+                  {/* Instructions & Help Card */}
+                  <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs text-xs space-y-2">
+                    <div className="flex items-center gap-2 text-slate-800 font-normal">
+                      <Info className="w-4 h-4 text-blue-600" />
+                      <span>របៀបប្រើប្រាស់ និងការបំពេញទិន្នន័យតាមឃុំ (Instruction Guide):</span>
+                    </div>
+                    <ul className="list-disc list-inside space-y-1 text-slate-600 pl-2">
+                      <li>
+                        <strong className="text-slate-800">ការផ្ញើតំណទៅកាន់មន្ត្រីឃុំ (Send to User):</strong>{' '}
+                        ចុចប៊ូតុង <span className="font-normal text-indigo-700">«ផ្ញើតំណតាមឃុំ (Send Link)»</span> ដើម្បីចម្លងតំណភ្ជាប់ ឬផ្ញើតាម Telegram ទៅកាន់មន្ត្រីតាមឃុំនីមួយៗ។ ពេលពួកគាត់បើកតំណ ផ្ទាំង Pop-up នឹងបង្ហាញឡើងភ្លាមៗជាមួយឈ្មោះឃុំនោះ ហើយប្រព័ន្ធនឹងចាក់សោសុវត្ថិភាព ឱ្យកែប្រែបានតែឃុំរបស់គាត់ប៉ុណ្ណោះ។
+                      </li>
+                      <li>
+                        <strong className="text-slate-800">ការជ្រើសរើសឃុំ និងបញ្ចូលក្នុង Pop-up:</strong>{' '}
+                        ក្នុងផ្ទាំង Pop-up មន្ត្រីបញ្ចូលលេខក្នុងក្រឡាដែលត្រូវបំពេញ (Input fields) ហើយពេលចុច «រក្សាទុក» វានឹងចូលក្នុងជួរដេកនៃឃុំនោះដោយស្វ័យប្រវត្តិ។
+                      </li>
+                      <li>
+                        <strong className="text-slate-800">ការបំពេញផ្ទាល់ក្នុងក្រឡា (Direct Cell Input):</strong>{' '}
+                        លោកអ្នកអាចចុចកែប្រែបានតែក្នុងជួរដេកនៃឃុំរបស់អ្នកប៉ុណ្ណោះ។ ឃុំផ្សេងទៀតក្នុងតារាងគឺសម្រាប់តែមើល (Read-only) ដើម្បីការពារការកែច្រឡំ។
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </>
+            )}
+          </main>
+
+          {/* Footer */}
+          <footer className="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-500 print:hidden">
+            គណៈកម្មាធិការស្រុកជើងព្រៃ ខេត្តកំពង់ចាម • ប្រព័ន្ធគ្រប់គ្រងការពិនិត្យបញ្ជីឈ្មោះ និងចុះឈ្មោះបោះឆ្នោត ឆ្នាំ ២០២៦
+          </footer>
         </div>
       </div>
 
@@ -1311,6 +1304,19 @@ export default function App() {
         onClose={() => setIsOAuthHelpOpen(false)}
         projectId="gen-lang-client-0648418690"
         blockedEmail={blockedEmail}
+      />
+
+      {/* Admin Unlock PIN Modal */}
+      <AdminPinModal
+        isOpen={isAdminPinModalOpen}
+        onClose={() => setIsAdminPinModalOpen(false)}
+        onSuccess={() => {
+          setLockedCommuneId(null);
+          setSuccessBanner('បានផ្ទៀងផ្ទាត់ PIN ត្រឹមត្រូវ និងដោះសោជា «របៀបមន្ត្រីស្រុក» រួចរាល់! លោកអ្នកអាចកែប្រែគ្រប់ឃុំទាំង១០។');
+          setTimeout(() => setSuccessBanner(null), 4000);
+        }}
+        expectedPin={metadata.adminPin || '1234'}
+        assignedCommuneName={assignedCommune?.communeName}
       />
     </div>
   );

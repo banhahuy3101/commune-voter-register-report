@@ -103,7 +103,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
             onChange={(e) => setTempValue(e.target.value)}
             onBlur={commitEdit}
             onKeyDown={handleKeyDown}
-            className="w-full text-center font-semibold text-blue-900 bg-white border border-blue-500 rounded px-1 py-0.5 text-xs focus:outline-hidden"
+            className="w-full text-center font-normal text-blue-900 bg-white border border-blue-500 rounded px-1 py-0.5 text-xs focus:outline-hidden"
           />
         </td>
       );
@@ -130,7 +130,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
         }
         className={`p-1.5 border border-slate-300 text-xs text-center transition-colors min-w-[48px] select-none ${
           isCalculated
-            ? `${customBg || 'bg-slate-50/90'} text-slate-700 font-semibold cursor-default`
+            ? `${customBg || 'bg-slate-50/90'} text-slate-700 font-normal cursor-default`
             : `${customBg} hover:bg-amber-100 hover:ring-1 hover:ring-amber-400 text-slate-900 cursor-pointer font-medium`
         }`}
       >
@@ -146,7 +146,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
         <div className="flex flex-wrap items-center gap-2.5">
           <div className="flex items-center gap-1.5">
             <Filter className="w-4 h-4 text-slate-500" />
-            <span className="text-xs font-semibold text-slate-700">ជ្រើសរើសឃុំ (Filter):</span>
+            <span className="text-xs font-normal text-slate-700">ជ្រើសរើសឃុំ (Filter):</span>
           </div>
           <select
             value={selectedCommuneId || ''}
@@ -168,7 +168,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
 
           {/* Locked Commune Status Indicator */}
           {assignedCommune && (
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-100 border border-amber-300 text-amber-900 rounded-lg text-xs font-semibold shadow-2xs">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-100 border border-amber-300 text-amber-900 rounded-lg text-xs font-normal shadow-2xs">
               <Lock className="w-3.5 h-3.5 text-amber-700" />
               <span>
                 សិទ្ធិកែប្រែ៖ <strong>{assignedCommune.communeName}</strong> (ឃុំផ្សេងទៀតចាក់សោ Read-Only)
@@ -178,7 +178,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
 
           {/* Date Indicator */}
           {reportDateKh && (
-            <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 shadow-2xs">
+            <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs font-normal text-slate-800 shadow-2xs">
               <Calendar className="w-3.5 h-3.5 text-blue-600" />
               <span className="truncate max-w-[260px]">{reportDateKh}</span>
             </div>
@@ -376,20 +376,20 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
                   key={row.id}
                   className={`transition-colors ${
                     isMyCommune
-                      ? 'bg-blue-50/50 ring-2 ring-inset ring-blue-500 font-semibold'
+                      ? 'bg-blue-50/50 ring-2 ring-inset ring-blue-500 font-normal'
                       : isOtherLocked
                       ? 'opacity-80 hover:bg-slate-50 bg-slate-50/30'
                       : 'hover:bg-blue-50/30'
                   }`}
                 >
-                  <td className="p-1.5 border border-slate-300 text-center font-semibold text-slate-800 bg-slate-50/50">
+                  <td className="p-1.5 border border-slate-300 text-center font-normal text-slate-800 bg-slate-50/50">
                     {row.communeNumberKh}
                   </td>
-                  <td className="p-1.5 border border-slate-300 font-semibold text-slate-900 whitespace-nowrap bg-slate-50/30">
+                  <td className="p-1.5 border border-slate-300 font-normal text-slate-900 whitespace-nowrap bg-slate-50/30">
                     <div className="flex items-center justify-between gap-1.5">
                       <span>{row.communeName}</span>
                       {isMyCommune && (
-                        <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-600 text-white shadow-2xs shrink-0">
+                        <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-normal bg-blue-600 text-white shadow-2xs shrink-0">
                           <Sparkles className="w-3 h-3" />
                           <span>ឃុំរបស់អ្នក</span>
                         </span>
@@ -474,7 +474,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
             })}
 
             {/* Total Row (សរុប - Cheung Prey District Summary) */}
-            <tr className="bg-amber-100/70 font-bold text-slate-900 border-t-2 border-slate-400">
+            <tr className="bg-amber-100/70 font-normal text-slate-900 border-t-2 border-slate-400">
               <td className="p-2 border border-slate-300 text-center"></td>
               <td className="p-2 border border-slate-300 text-center font-moul text-amber-950">
                 សរុប
@@ -601,14 +601,14 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
             />
           </div>
 
-          <div className="text-slate-950 font-bold text-sm tracking-wide mt-1">
+          <div className="text-slate-950 font-normal text-sm tracking-wide mt-1">
             {metadata?.signerLeftName || 'ឆាយ វ៉ាន់ស៊ី'}
           </div>
         </div>
 
         {/* Right Signer */}
         <div className="space-y-1 font-moul w-64 flex flex-col items-center">
-          <div className="text-slate-800 text-xs font-semibold">
+          <div className="text-slate-800 text-xs font-normal">
             {metadata?.signerRightDateLocation || 'ជើងព្រៃ ថ្ងៃទី ៧ ខែតុលា ឆ្នាំ២០២៦'}
           </div>
           <div className="text-slate-900 font-normal">អ្នកធ្វើតារាង</div>
@@ -622,7 +622,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
             />
           </div>
 
-          <div className="text-slate-950 font-bold text-sm tracking-wide mt-1">
+          <div className="text-slate-950 font-normal text-sm tracking-wide mt-1">
             {metadata?.signerRightName || 'ស៊ីម ល័ក្ខ'}
           </div>
         </div>

@@ -109,6 +109,7 @@ export async function saveCommuneToFirestore(
 
 /**
  * Real-time listener for district report metadata & Google Sheet settings
+ * Includes adminPin key in settings collection
  */
 export function subscribeToDistrictSettings(
   onUpdate: (metadata: Partial<SheetMetadata>) => void
@@ -117,7 +118,17 @@ export function subscribeToDistrictSettings(
 
   return onSnapshot(docRef, (docSnap) => {
     if (docSnap.exists()) {
-      onUpdate(docSnap.data() as Partial<SheetMetadata>);
+      const data = docSnap.data() as Partial<SheetMetadata>;
+      if (!data.adminPin) {
+        // Automatically save new adminPin key to settings collection if not present
+        setDoc(docRef, { adminPin: '1234' }, { merge: true }).catch(console.warn);
+        data.adminPin = '1234';
+      }
+      onUpdate(data);
+    } else {
+      // Create initial settings doc with adminPin '1234'
+      setDoc(docRef, { adminPin: '1234' }, { merge: true }).catch(console.warn);
+      onUpdate({ adminPin: '1234' });
     }
   });
 }
@@ -129,7 +140,7 @@ export async function saveDistrictSettingsToFirestore(
   metadata: Partial<SheetMetadata>
 ): Promise<void> {
   const docRef = doc(db, SETTINGS_COLLECTION, DISTRICT_DOC_ID);
-  await setDoc(docRef, metadata, { merge: true });
+  await setDoc(docRef, { ...metadata, adminPin: metadata.adminPin || '1234' }, { merge: true });
 }
 
 /**

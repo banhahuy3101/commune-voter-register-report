@@ -65,7 +65,7 @@ export const ShareCommuneLinksModal: React.FC<ShareCommuneLinksModalProps> = ({
               <Share2 className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base font-semibold">ផ្ញើតំណភ្ជាប់តាមឃុំនីមួយៗ (Send Link by Commune)</h2>
+              <h2 className="text-base font-normal">ផ្ញើតំណភ្ជាប់តាមឃុំនីមួយៗ (Send Link by Commune)</h2>
               <p className="text-xs text-slate-400">
                 មន្ត្រីបើកតំណ នឹងអាចកែប្រែបានតែឃុំរបស់ខ្លួនប៉ុណ្ណោះ (ឃុំផ្សេងទៀតចាក់សោ Read-Only)
               </p>
@@ -82,7 +82,7 @@ export const ShareCommuneLinksModal: React.FC<ShareCommuneLinksModalProps> = ({
         {/* Content */}
         <div className="p-6 overflow-y-auto space-y-4">
           <div className="bg-blue-50/80 border border-blue-200 rounded-xl p-3.5 text-xs text-blue-900 space-y-2">
-            <div className="flex items-center gap-1.5 font-bold text-blue-950">
+            <div className="flex items-center gap-1.5 font-normal text-blue-950">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>ប្រព័ន្ធការពារសុវត្ថិភាពទិន្នន័យ (Commune Lock Protection)៖</span>
             </div>
@@ -111,12 +111,12 @@ export const ShareCommuneLinksModal: React.FC<ShareCommuneLinksModalProps> = ({
                 className="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-xs">
+                  <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center font-normal text-xs">
                     {commune.communeNumberKh}
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-slate-800 text-sm">{commune.communeName}</span>
+                      <span className="font-normal text-slate-800 text-sm">{commune.communeName}</span>
                       <span className="inline-flex items-center gap-1 text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded font-medium">
                         <Lock className="w-2.5 h-2.5" />
                         <span>កែបានតែឃុំនេះ</span>
@@ -144,7 +144,7 @@ export const ShareCommuneLinksModal: React.FC<ShareCommuneLinksModalProps> = ({
                   {/* Telegram Share button */}
                   <button
                     onClick={() => handleTelegramShare(commune)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#229ED9] hover:bg-[#1E88E5] text-white text-xs font-semibold rounded-lg transition-colors cursor-pointer shadow-2xs"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#229ED9] hover:bg-[#1E88E5] text-white text-xs font-normal rounded-lg transition-colors cursor-pointer shadow-2xs"
                     title="ផ្ញើទៅកាន់ Telegram"
                   >
                     <MessageCircle className="w-3.5 h-3.5" />
@@ -154,7 +154,7 @@ export const ShareCommuneLinksModal: React.FC<ShareCommuneLinksModalProps> = ({
                   {/* Copy Link */}
                   <button
                     onClick={() => handleCopy(commune)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors cursor-pointer ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-normal rounded-lg border transition-colors cursor-pointer ${
                       copiedId === commune.id
                         ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
                         : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'

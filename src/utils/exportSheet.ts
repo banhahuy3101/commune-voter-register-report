@@ -13,12 +13,23 @@ export const printSheetContentOnly = (metadata?: SheetMetadata) => {
     document.title = titleParts.join(' - ');
   }
 
+  // Ensure element has 20px padding when clicking export / print PDF
+  const sheetElement = document.getElementById('official-document-sheet');
+  const originalPadding = sheetElement?.style.padding;
+  if (sheetElement) {
+    sheetElement.style.padding = '20px';
+    sheetElement.style.boxSizing = 'border-box';
+  }
+
   // Allow browser time to register title change before calling print
   setTimeout(() => {
     window.print();
-    // Restore original document title after print dialog closes
+    // Restore original document title and padding after print dialog closes
     setTimeout(() => {
       document.title = originalTitle;
+      if (sheetElement) {
+        sheetElement.style.padding = originalPadding || '';
+      }
     }, 1500);
   }, 100);
 };
@@ -211,8 +222,8 @@ export const exportSheetToStandaloneHTML = (
 
   const docTitle = metadata
     ? [metadata.reportTitleKh || 'លទ្ធផលនៃការពិនិត្យបញ្ជីឈ្មោះ និងការចុះឈ្មោះបោះឆ្នោត', metadata.reportDateKh || '']
-        .filter(Boolean)
-        .join(' - ')
+      .filter(Boolean)
+      .join(' - ')
     : 'លទ្ធផលពិនិត្យបញ្ជីឈ្មោះ និងចុះឈ្មោះបោះឆ្នោត - ស្រុកជើងព្រៃ';
 
   const fullHtml = `<!DOCTYPE html>
@@ -251,7 +262,8 @@ export const exportSheetToStandaloneHTML = (
       .sheet-container {
         box-shadow: none !important;
         border: none !important;
-        padding: 0 !important;
+        padding: 20px !important;
+        box-sizing: border-box !important;
         max-width: 100% !important;
         background: #ffffff !important;
       }

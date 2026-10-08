@@ -25,13 +25,16 @@
   height: 8px;
   width: 8px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-track {
   background: #f1f5f9;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 4px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
@@ -87,14 +90,15 @@
     background-color: transparent !important;
   }
 
-  /* Display the official document sheet cleanly on pure white background */
+  /* Display the official document sheet cleanly on pure white background with 20px padding */
   #official-document-sheet {
     display: block !important;
     position: static !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 auto !important;
-    padding: 0 !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
     border: none !important;
     box-shadow: none !important;
     background: #ffffff !important;

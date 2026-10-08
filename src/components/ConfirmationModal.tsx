@@ -38,7 +38,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                 <CheckCircle className="w-5 h-5" />
               </div>
             )}
-            <h3 className="text-base font-semibold text-gray-900">{title}</h3>
+            <h3 className="text-base font-normal text-gray-900">{title}</h3>
           </div>
           <button
             onClick={onCancel}

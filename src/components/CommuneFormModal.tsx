@@ -91,7 +91,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
               <div className="text-xs text-amber-300 font-medium">
                 ស្រុកជើងព្រៃ • បញ្ចូលទិន្នន័យតាមឃុំ (Fill by Commune)
               </div>
-              <h2 className="text-base md:text-lg font-bold font-moul tracking-wide mt-0.5">
+              <h2 className="text-base md:text-lg font-normal font-moul tracking-wide mt-0.5">
                 ទម្រង់បំពេញទិន្នន័យតាមឃុំ
               </h2>
             </div>
@@ -110,7 +110,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
             <div className="flex-1">
               {lockedCommuneId ? (
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-normal text-slate-700 uppercase tracking-wider mb-1">
                     ឃុំដែលអ្នកមានសិទ្ធិបំពេញ (Your Assigned Commune):
                   </label>
                   <div className="flex items-center gap-2.5 bg-blue-900 text-white px-3.5 py-2 rounded-xl border border-blue-700 shadow-xs">
@@ -118,7 +118,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
                       <Lock className="w-4 h-4" />
                     </div>
                     <div className="min-w-0">
-                      <div className="text-sm md:text-base font-bold font-moul truncate text-amber-300">
+                      <div className="text-sm md:text-base font-normal font-moul truncate text-amber-300">
                         {formData.communeNumberKh}. {formData.communeName}
                       </div>
                       <div className="text-[11px] text-blue-200">
@@ -129,14 +129,14 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
                 </div>
               ) : (
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-normal text-slate-700 uppercase tracking-wider mb-1">
                     ជ្រើសរើសឃុំដែលត្រូវបំពេញ (Select Commune to Fill):
                   </label>
                   <div className="relative">
                     <select
                       value={formData.id}
                       onChange={handleCommuneChange}
-                      className="w-full bg-white border-2 border-blue-500 rounded-xl py-2 px-3.5 pr-8 text-sm md:text-base font-bold text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-blue-600 shadow-xs cursor-pointer"
+                      className="w-full bg-white border-2 border-blue-500 rounded-xl py-2 px-3.5 pr-8 text-sm md:text-base font-normal text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-blue-600 shadow-xs cursor-pointer"
                     >
                       {communes.map((c) => (
                         <option key={c.id} value={c.id}>
@@ -155,7 +155,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveTab('daily')}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+                className={`px-3 py-1.5 text-xs font-normal rounded-lg transition-colors cursor-pointer ${
                   activeTab === 'daily'
                     ? 'bg-blue-600 text-white shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
@@ -166,7 +166,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveTab('all')}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+                className={`px-3 py-1.5 text-xs font-normal rounded-lg transition-colors cursor-pointer ${
                   activeTab === 'all'
                     ? 'bg-blue-600 text-white shadow-2xs'
                     : 'text-slate-600 hover:text-slate-900'
@@ -185,11 +185,11 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
             <div className="flex items-center justify-between border-b border-blue-200 pb-2">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse"></span>
-                <h3 className="font-bold text-blue-950 text-xs md:text-sm uppercase tracking-wide">
+                <h3 className="font-normal text-blue-950 text-xs md:text-sm uppercase tracking-wide">
                   ទិន្នន័យប្រចាំថ្ងៃ «ក្នុងគ្រា» ថ្ងៃនេះ (Today's Entry)
                 </h3>
               </div>
-              <span className="text-xs text-blue-700 font-semibold bg-blue-100 px-2.5 py-0.5 rounded-full">
+              <span className="text-xs text-blue-700 font-normal bg-blue-100 px-2.5 py-0.5 rounded-full">
                 បំពេញក្នុងជួរដេក៖ {formData.communeName}
               </span>
             </div>
@@ -197,7 +197,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5">
               {/* 1. ចុះឈ្មោះថ្មី ក្នុងគ្រា */}
               <div className="bg-white p-3 rounded-xl border border-teal-300 shadow-2xs space-y-2">
-                <div className="text-xs font-bold text-teal-900 flex items-center justify-between">
+                <div className="text-xs font-normal text-teal-900 flex items-center justify-between">
                   <span>ចុះឈ្មោះថ្មី</span>
                   <span className="text-[10px] bg-teal-100 text-teal-800 px-1.5 rounded">ក្នុងគ្រា</span>
                 </div>
@@ -208,7 +208,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
                     min="0"
                     value={formData.newRegCurrentTotal}
                     onChange={(e) => handleFieldChange('newRegCurrentTotal', e.target.value)}
-                    className="w-full px-2.5 py-1.5 border border-teal-400 rounded-lg text-sm font-bold text-slate-900 focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-2.5 py-1.5 border border-teal-400 rounded-lg text-sm font-normal text-slate-900 focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
                 <div>
@@ -218,14 +218,14 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
                     min="0"
                     value={formData.newRegCurrentCpp}
                     onChange={(e) => handleFieldChange('newRegCurrentCpp', e.target.value)}
-                    className="w-full px-2.5 py-1.5 border border-teal-400 rounded-lg text-sm font-bold text-slate-900 focus:ring-2 focus:ring-teal-500"
+                    className="w-full px-2.5 py-1.5 border border-teal-400 rounded-lg text-sm font-normal text-slate-900 focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
               </div>
 
               {/* 2. លុបឈ្មោះ ក្នុងគ្រា */}
               <div className="bg-white p-3 rounded-xl border border-sky-300 shadow-2xs space-y-2">
-                <div className="text-xs font-bold text-sky-900 flex items-center justify-between">
+                <div className="text-xs font-normal text-sky-900 flex items-center justify-between">
                   <span>លុបឈ្មោះ</span>
                   <span className="text-[10px] bg-sky-100 text-sky-800 px-1.5 rounded">ក្នុងគ្រា</span>
                 </div>
@@ -236,7 +236,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
                     min="0"
                     value={formData.deletedCurrentTotal}
                     onChange={(e) => handleFieldChange('deletedCurrentTotal', e.target.value)}
-                    className="w-full px-2.5 py-1.5 border border-sky-400 rounded-lg text-sm font-bold text-slate-900 focus:ring-2 focus:ring-sky-500"
+                    className="w-full px-2.5 py-1.5 border border-sky-400 rounded-lg text-sm font-normal text-slate-900 focus:ring-2 focus:ring-sky-500"
                   />
                 </div>
                 <div>
@@ -246,14 +246,14 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
                     min="0"
                     value={formData.deletedCurrentCpp}
                     onChange={(e) => handleFieldChange('deletedCurrentCpp', e.target.value)}
-                    className="w-full px-2.5 py-1.5 border border-sky-400 rounded-lg text-sm font-bold text-slate-900 focus:ring-2 focus:ring-sky-500"
+                    className="w-full px-2.5 py-1.5 border border-sky-400 rounded-lg text-sm font-normal text-slate-900 focus:ring-2 focus:ring-sky-500"
                   />
                 </div>
               </div>
 
               {/* 3. កែទិន្ន័យ ក្នុងគ្រា */}
               <div className="bg-white p-3 rounded-xl border border-amber-300 shadow-2xs space-y-2">
-                <div className="text-xs font-bold text-amber-900 flex items-center justify-between">
+                <div className="text-xs font-normal text-amber-900 flex items-center justify-between">
                   <span>កែទិន្នន័យ</span>
                   <span className="text-[10px] bg-amber-100 text-amber-800 px-1.5 rounded">ក្នុងគ្រា</span>
                 </div>
@@ -264,7 +264,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
                     min="0"
                     value={formData.bioCorrectionCurrentTotal}
                     onChange={(e) => handleFieldChange('bioCorrectionCurrentTotal', e.target.value)}
-                    className="w-full px-2.5 py-1.5 border border-amber-400 rounded-lg text-sm font-bold text-slate-900 focus:ring-2 focus:ring-amber-500"
+                    className="w-full px-2.5 py-1.5 border border-amber-400 rounded-lg text-sm font-normal text-slate-900 focus:ring-2 focus:ring-amber-500"
                   />
                 </div>
                 <div>
@@ -274,14 +274,14 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
                     min="0"
                     value={formData.bioCorrectionCurrentCpp}
                     onChange={(e) => handleFieldChange('bioCorrectionCurrentCpp', e.target.value)}
-                    className="w-full px-2.5 py-1.5 border border-amber-400 rounded-lg text-sm font-bold text-slate-900 focus:ring-2 focus:ring-amber-500"
+                    className="w-full px-2.5 py-1.5 border border-amber-400 rounded-lg text-sm font-normal text-slate-900 focus:ring-2 focus:ring-amber-500"
                   />
                 </div>
               </div>
 
               {/* 4. ជីវមាត្រ ក្នុងគ្រា */}
               <div className="bg-white p-3 rounded-xl border border-purple-300 shadow-2xs space-y-2">
-                <div className="text-xs font-bold text-purple-900 flex items-center justify-between">
+                <div className="text-xs font-normal text-purple-900 flex items-center justify-between">
                   <span>ជីវមាត្រ</span>
                   <span className="text-[10px] bg-purple-100 text-purple-800 px-1.5 rounded">ក្នុងគ្រា</span>
                 </div>
@@ -292,7 +292,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
                     min="0"
                     value={formData.biometricCurrentTotal}
                     onChange={(e) => handleFieldChange('biometricCurrentTotal', e.target.value)}
-                    className="w-full px-2.5 py-1.5 border border-purple-400 rounded-lg text-sm font-bold text-slate-900 focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2.5 py-1.5 border border-purple-400 rounded-lg text-sm font-normal text-slate-900 focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
                 <div>
@@ -302,7 +302,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
                     min="0"
                     value={formData.biometricCurrentCpp}
                     onChange={(e) => handleFieldChange('biometricCurrentCpp', e.target.value)}
-                    className="w-full px-2.5 py-1.5 border border-purple-400 rounded-lg text-sm font-bold text-slate-900 focus:ring-2 focus:ring-purple-500"
+                    className="w-full px-2.5 py-1.5 border border-purple-400 rounded-lg text-sm font-normal text-slate-900 focus:ring-2 focus:ring-purple-500"
                   />
                 </div>
               </div>
@@ -314,7 +314,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
             <div className="space-y-4 animate-in fade-in duration-200">
               {/* 2025 List Base */}
               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                <h4 className="font-bold text-slate-800 text-xs uppercase mb-3">
+                <h4 className="font-normal text-slate-800 text-xs uppercase mb-3">
                   ចំនួនក្នុងបញ្ជីឆ្នាំ២០២៥ (List 2025 Baseline)
                 </h4>
                 <div className="grid grid-cols-2 gap-4">
@@ -325,7 +325,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
                       min="0"
                       value={formData.list2025Total}
                       onChange={(e) => handleFieldChange('list2025Total', e.target.value)}
-                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-sm font-semibold"
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-sm font-normal"
                     />
                   </div>
                   <div>
@@ -335,7 +335,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
                       min="0"
                       value={formData.list2025Cpp}
                       onChange={(e) => handleFieldChange('list2025Cpp', e.target.value)}
-                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-sm font-semibold"
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-sm font-normal"
                     />
                   </div>
                 </div>
@@ -343,7 +343,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
 
               {/* ដើមគ្រា (Starting/Prior Base Numbers) */}
               <div className="p-4 bg-amber-50/50 rounded-2xl border border-amber-200">
-                <h4 className="font-bold text-amber-950 text-xs uppercase mb-3">
+                <h4 className="font-normal text-amber-950 text-xs uppercase mb-3">
                   ទិន្នន័យ «ដើមគ្រា» (Beginning of Period Base)
                 </h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -442,7 +442,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
           {/* Section 3: Live Calculation Summary Card */}
           <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-300 space-y-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-emerald-900 font-bold text-xs uppercase">
+              <div className="flex items-center gap-2 text-emerald-900 font-normal text-xs uppercase">
                 <Calculator className="w-4 h-4 text-emerald-700" />
                 <span>លទ្ធផលគណនាស្វ័យប្រវត្តិនឹងត្រូវបំពេញចូលក្នុងជួរដេក (Auto-Calculation Result)</span>
               </div>
@@ -454,7 +454,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
               <div className="bg-white/80 p-2.5 rounded-xl border border-emerald-200">
                 <div className="text-slate-500 text-[11px]">បូកយោង ចុះថ្មី</div>
-                <div className="text-base font-bold text-slate-800">
+                <div className="text-base font-normal text-slate-800">
                   {formatKhmerNumber(formData.newRegCumulativeTotal)}
                 </div>
                 <div className="text-[10px] text-slate-600">
@@ -464,7 +464,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
 
               <div className="bg-white/80 p-2.5 rounded-xl border border-emerald-200">
                 <div className="text-slate-500 text-[11px]">បូកយោង លុបឈ្មោះ</div>
-                <div className="text-base font-bold text-slate-800">
+                <div className="text-base font-normal text-slate-800">
                   {formatKhmerNumber(formData.deletedCumulativeTotal)}
                 </div>
                 <div className="text-[10px] text-slate-600">
@@ -474,7 +474,7 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
 
               <div className="bg-white/80 p-2.5 rounded-xl border border-emerald-200">
                 <div className="text-slate-500 text-[11px]">បូកយោង កែទិន្នន័យ</div>
-                <div className="text-base font-bold text-slate-800">
+                <div className="text-base font-normal text-slate-800">
                   {formatKhmerNumber(formData.bioCorrectionCumulativeTotal)}
                 </div>
                 <div className="text-[10px] text-slate-600">
@@ -483,8 +483,8 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
               </div>
 
               <div className="bg-emerald-600 text-white p-2.5 rounded-xl shadow-xs">
-                <div className="text-emerald-100 text-[11px] font-semibold">បញ្ជីឆ្នាំ២០២៦ (ចុងក្រោយ)</div>
-                <div className="text-base font-bold">
+                <div className="text-emerald-100 text-[11px] font-normal">បញ្ជីឆ្នាំ២០២៦ (ចុងក្រោយ)</div>
+                <div className="text-base font-normal">
                   {formatKhmerNumber(formData.list2026Total)}
                 </div>
                 <div className="text-[10px] text-emerald-200">
@@ -499,14 +499,14 @@ export const CommuneFormModal: React.FC<CommuneFormModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
+              className="px-4 py-2.5 text-xs font-normal text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
             >
               បោះបង់ (Cancel)
             </button>
 
             <button
               type="submit"
-              className="flex items-center gap-2 px-6 py-2.5 text-xs md:text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all cursor-pointer shadow-md hover:shadow-lg"
+              className="flex items-center gap-2 px-6 py-2.5 text-xs md:text-sm font-normal text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all cursor-pointer shadow-md hover:shadow-lg"
             >
               <Save className="w-4 h-4" />
               <span>រក្សាទុកចូលក្នុងជួរដេក {formData.communeName}</span>

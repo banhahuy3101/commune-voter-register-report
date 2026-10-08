@@ -21,6 +21,7 @@ import {
   Download,
 } from 'lucide-react';
 import { SheetMetadata } from '../types/sheet';
+import { DatePicker } from './ui/date-picker';
 
 interface HeaderProps {
   user: User | null;
@@ -182,35 +183,37 @@ export const Header: React.FC<HeaderProps> = ({
               {onToggleSidebar && (
                 <button
                   onClick={onToggleSidebar}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-amber-300 rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer border border-slate-700"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-amber-300 rounded-lg text-xs font-normal shadow-xs transition-colors cursor-pointer border border-slate-700"
                   title="បើក / បិទ បញ្ជីតាមខែ (Toggle Monthly Records)"
                 >
                   <Menu className="w-4 h-4 text-amber-400" />
                   <span>បញ្ជីតាមខែ ({monthsCount})</span>
                   {activeMonthName && (
-                    <span className="bg-amber-400/20 text-amber-200 px-1.5 py-0.5 rounded text-[11px] font-bold">
+                    <span className="bg-amber-400/20 text-amber-200 px-1.5 py-0.5 rounded text-[11px] font-normal">
                       {activeMonthName}
                     </span>
                   )}
                 </button>
               )}
-              <h1 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 tracking-tight font-moul text-blue-950">
+              <h1 className="text-base sm:text-lg md:text-xl font-normal text-gray-900 tracking-tight font-moul text-blue-950">
                 {metadata.reportTitleKh}
               </h1>
             </div>
 
             <div className="flex items-center gap-2 mt-2">
-              <span className="flex items-center gap-1.5 text-xs font-bold text-slate-700 shrink-0">
+              <span className="flex items-center gap-1.5 text-xs font-normal text-slate-700 shrink-0">
                 <Calendar className="w-4 h-4 text-blue-600" />
                 <span>កាលបរិច្ឆេទ៖</span>
               </span>
-              <input
-                type="text"
+              <DatePicker
                 value={metadata.reportDateKh}
-                onChange={(e) => onUpdateMetadata({ reportDateKh: e.target.value })}
-                className="w-80 sm:w-96 md:w-[420px] max-w-full bg-white hover:bg-blue-50/20 focus:bg-white border border-slate-300 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 rounded-lg text-xs sm:text-sm font-semibold text-slate-800 px-3 py-1.5 shadow-2xs transition-all placeholder:text-slate-400"
-                placeholder="ប្រចាំថ្ងៃទី ៧ ខែ តុលា ឆ្នាំ ២០២៦"
-                title="កាលបរិច្ឆេទរបាយការណ៍ (Report Date) - ចុចដើម្បីកែប្រែ"
+                onChange={(formattedKh) =>
+                  onUpdateMetadata({
+                    reportDateKh: formattedKh,
+                    signerRightDateLocation: `ជើងព្រៃ ${formattedKh.replace('ប្រចាំ', '').trim()}`,
+                  })
+                }
+                title="កាលបរិច្ឆេទរបាយការណ៍ (Report Date) - ជ្រើសរើសពីប្រតិទិន Date Picker"
               />
             </div>
           </div>
@@ -220,7 +223,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Direct Fill by Commune Popup Button */}
             <button
               onClick={onOpenCommunePopup}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-normal shadow-xs transition-colors cursor-pointer"
               title={
                 lockedCommuneId
                   ? `បើកផ្ទាំង Pop-up បំពេញទិន្នន័យ ${assignedCommuneName}`
@@ -242,7 +245,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Send Commune Link Button */}
             <button
               onClick={onOpenShareLinks}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 rounded-lg text-xs font-normal transition-colors cursor-pointer"
               title="ផ្ញើតំណភ្ជាប់ Pop-up ទៅកាន់មន្ត្រីឃុំ"
             >
               <Send className="w-3.5 h-3.5 text-indigo-600" />
@@ -252,11 +255,10 @@ export const Header: React.FC<HeaderProps> = ({
             {/* View Mode Toggle: Spreadsheet Grid vs Official Print Document */}
             <button
               onClick={onToggleOfficialView}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
-                isOfficialView
-                  ? 'bg-amber-50 text-amber-900 border-amber-300'
-                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-              }`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${isOfficialView
+                ? 'bg-amber-50 text-amber-900 border-amber-300'
+                : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                }`}
             >
               <Printer className="w-3.5 h-3.5 text-amber-600" />
               <span>{isOfficialView ? 'មើលតារាង (Grid View)' : 'ទម្រង់ឯកសារផ្លូវការ (Print View)'}</span>
@@ -266,7 +268,7 @@ export const Header: React.FC<HeaderProps> = ({
             {onExportExcel && (
               <button
                 onClick={onExportExcel}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-semibold transition-colors cursor-pointer shadow-2xs"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-normal transition-colors cursor-pointer shadow-2xs"
                 title="នាំចេញជាឯកសារ Excel (.xlsx) ដែលមានតែ Header + Table + Sign"
               >
                 <Download className="w-3.5 h-3.5 text-emerald-600" />
@@ -278,7 +280,7 @@ export const Header: React.FC<HeaderProps> = ({
             {onPrintDocument && (
               <button
                 onClick={onPrintDocument}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold transition-colors cursor-pointer shadow-xs"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-normal transition-colors cursor-pointer shadow-xs"
                 title="បោះពុម្ព ឬរក្សាទុកជា PDF ដែលមានតែ Header + Table + Sign"
               >
                 <Printer className="w-3.5 h-3.5 text-amber-300" />
@@ -293,7 +295,7 @@ export const Header: React.FC<HeaderProps> = ({
                   href={metadata.spreadsheetUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-semibold hover:bg-emerald-100 transition-colors shadow-2xs"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-normal hover:bg-emerald-100 transition-colors shadow-2xs"
                   title="ចុចដើម្បីបើកក្នុង Google Sheets"
                 >
                   <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
@@ -336,7 +338,7 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 onClick={onCreateSheet}
                 disabled={isCreating}
-                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs md:text-sm font-semibold shadow-xs transition-colors cursor-pointer disabled:opacity-60"
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs md:text-sm font-normal shadow-xs transition-colors cursor-pointer disabled:opacity-60"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>{isCreating ? 'កំពុងបង្កើត Google Sheet...' : 'បង្កើត Google Sheet ថ្មី'}</span>
@@ -354,7 +356,7 @@ export const Header: React.FC<HeaderProps> = ({
             {onOpenOAuthHelp && (
               <button
                 onClick={onOpenOAuthHelp}
-                className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded text-xs font-semibold cursor-pointer transition-colors"
+                className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded text-xs font-normal cursor-pointer transition-colors"
               >
                 <HelpCircle className="w-3 h-3" />
                 <span>វិធីដោះស្រាយ Error 403 / Test Users</span>

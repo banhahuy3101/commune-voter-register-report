@@ -28,15 +28,15 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
   return (
     <div
       id={id}
-      className={`bg-white p-6 md:p-10 rounded-xl shadow-lg border border-slate-200 max-w-7xl mx-auto print:shadow-none print:border-none print:p-0 print:m-0 text-slate-900 font-kantumruy ${className}`}
+      className={`bg-white p-6 md:p-10 rounded-xl shadow-lg border border-slate-200 max-w-7xl mx-auto print:shadow-none print:border-none print:p-[20px] print:m-0 text-slate-900 font-kantumruy ${className}`}
     >
       {/* Document Header */}
       <div className="flex justify-between items-start mb-6">
         {/* Top-Left Letterhead */}
         <div className="text-center font-moul space-y-1">
-          <div className="text-sm md:text-base font-bold text-slate-900">គណបក្សប្រជាជនកម្ពុជា</div>
-          <div className="text-xs md:text-sm font-bold text-slate-800">គណៈកម្មាធិការខេត្តកំពង់ចាម</div>
-          <div className="text-xs md:text-sm font-bold text-slate-800">គណៈកម្មាធិការស្រុកជើងព្រៃ</div>
+          <div className="text-sm md:text-base font-normal text-slate-900">គណបក្សប្រជាជនកម្ពុជា</div>
+          <div className="text-xs md:text-sm font-normal text-slate-800">គណៈកម្មាធិការខេត្តកំពង់ចាម</div>
+          <div className="text-xs md:text-sm font-normal text-slate-800">គណៈកម្មាធិការស្រុកជើងព្រៃ</div>
         </div>
 
         {/* CPP Official Logo */}
@@ -56,10 +56,10 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
 
         {/* Top-Right Motto */}
         <div className="text-center font-moul space-y-1">
-          <div className="text-xs md:text-sm font-bold text-slate-900">
+          <div className="text-xs md:text-sm font-normal text-slate-900">
             ឯករាជ្យ សន្តិភាព សេរីភាព ប្រជាធិបតេយ្យ
           </div>
-          <div className="text-xs md:text-sm font-bold text-slate-800">
+          <div className="text-xs md:text-sm font-normal text-slate-800">
             អព្យាក្រឹត និងវឌ្ឍនភាពសង្គម
           </div>
         </div>
@@ -67,10 +67,10 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
 
       {/* Document Title */}
       <div className="text-center my-6 space-y-2">
-        <h2 className="text-base md:text-lg lg:text-xl font-bold font-moul text-slate-950">
+        <h2 className="text-base md:text-lg lg:text-xl font-normal font-moul text-slate-950">
           {metadata.reportTitleKh}
         </h2>
-        <div className="text-xs md:text-sm font-semibold text-slate-800">
+        <div className="text-xs md:text-sm font-normal text-slate-800">
           {metadata.reportDateKh}
         </div>
       </div>
@@ -191,8 +191,8 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
           <tbody>
             {data.map((row) => (
               <tr key={row.id} className="text-center">
-                <td className="p-1 border border-slate-900 font-semibold">{row.communeNumberKh}</td>
-                <td className="p-1 border border-slate-900 font-semibold text-left whitespace-nowrap pl-2">
+                <td className="p-1 border border-slate-900 font-normal">{row.communeNumberKh}</td>
+                <td className="p-1 border border-slate-900 font-normal text-left whitespace-nowrap pl-2">
                   {row.communeName}
                 </td>
 
@@ -217,10 +217,10 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
                 <td className="p-1 border border-slate-900">
                   {formatKhmerNumber(row.newRegCurrentCpp)}
                 </td>
-                <td className="p-1 border border-slate-900 font-semibold bg-teal-50">
+                <td className="p-1 border border-slate-900 font-normal bg-teal-50">
                   {formatKhmerNumber(row.newRegCumulativeTotal)}
                 </td>
-                <td className="p-1 border border-slate-900 font-semibold bg-teal-50">
+                <td className="p-1 border border-slate-900 font-normal bg-teal-50">
                   {formatKhmerNumber(row.newRegCumulativeCpp)}
                 </td>
 
@@ -237,10 +237,10 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
                 <td className="p-1 border border-slate-900">
                   {formatKhmerNumber(row.deletedCurrentCpp)}
                 </td>
-                <td className="p-1 border border-slate-900 font-semibold bg-sky-50">
+                <td className="p-1 border border-slate-900 font-normal bg-sky-50">
                   {formatKhmerNumber(row.deletedCumulativeTotal)}
                 </td>
-                <td className="p-1 border border-slate-900 font-semibold bg-sky-50">
+                <td className="p-1 border border-slate-900 font-normal bg-sky-50">
                   {formatKhmerNumber(row.deletedCumulativeCpp)}
                 </td>
 
@@ -257,10 +257,10 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
                 <td className="p-1 border border-slate-900">
                   {formatKhmerNumber(row.bioCorrectionCurrentCpp)}
                 </td>
-                <td className="p-1 border border-slate-900 font-semibold bg-amber-50">
+                <td className="p-1 border border-slate-900 font-normal bg-amber-50">
                   {formatKhmerNumber(row.bioCorrectionCumulativeTotal)}
                 </td>
-                <td className="p-1 border border-slate-900 font-semibold bg-amber-50">
+                <td className="p-1 border border-slate-900 font-normal bg-amber-50">
                   {formatKhmerNumber(row.bioCorrectionCumulativeCpp)}
                 </td>
 
@@ -277,25 +277,25 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
                 <td className="p-1 border border-slate-900">
                   {formatKhmerNumber(row.biometricCurrentCpp)}
                 </td>
-                <td className="p-1 border border-slate-900 font-semibold bg-purple-50">
+                <td className="p-1 border border-slate-900 font-normal bg-purple-50">
                   {formatKhmerNumber(row.biometricCumulativeTotal)}
                 </td>
-                <td className="p-1 border border-slate-900 font-semibold bg-purple-50">
+                <td className="p-1 border border-slate-900 font-normal bg-purple-50">
                   {formatKhmerNumber(row.biometricCumulativeCpp)}
                 </td>
 
                 {/* 2026 List */}
-                <td className="p-1 border border-slate-900 font-bold bg-white">
+                <td className="p-1 border border-slate-900 font-normal bg-white">
                   {formatKhmerNumber(row.list2026Total)}
                 </td>
-                <td className="p-1 border border-slate-900 font-bold bg-white text-blue-900">
+                <td className="p-1 border border-slate-900 font-normal bg-white text-blue-900">
                   {formatKhmerNumber(row.list2026Cpp)}
                 </td>
               </tr>
             ))}
 
             {/* Total Row */}
-            <tr className="text-center font-bold bg-white border-t-2 border-slate-900 text-slate-950">
+            <tr className="text-center font-normal bg-white border-t-2 border-slate-900 text-slate-950">
               <td colSpan={2} className="p-1.5 border border-slate-900 text-center font-moul text-xs bg-white">
                 សរុបស្រុកជើងព្រៃ
               </td>
@@ -389,10 +389,10 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
               </td>
 
               {/* 2026 */}
-              <td className="p-1 border border-slate-900 bg-white font-bold">
+              <td className="p-1 border border-slate-900 bg-white font-normal">
                 {formatKhmerNumber(districtTotal.list2026Total)}
               </td>
-              <td className="p-1 border border-slate-900 bg-white font-bold text-blue-900">
+              <td className="p-1 border border-slate-900 bg-white font-normal text-blue-900">
                 {formatKhmerNumber(districtTotal.list2026Cpp)}
               </td>
             </tr>
@@ -406,39 +406,47 @@ export const OfficialDocumentSheet: React.FC<OfficialDocumentSheetProps> = ({
         <div className="space-y-1 font-moul w-64 flex flex-col items-center">
           <div className="text-slate-900 font-normal">បានឃើញ និងឯកភាព</div>
           <div className="text-slate-900 font-normal">ជ.គណៈអចិន្ត្រៃយ៍</div>
-          <div className="text-slate-900 font-normal">អនុប្រធានប្រចាំការ</div>
+          <div className="relative ml-16 flex flex-col items-start">
+            <div className="text-slate-900 font-normal  leading-none">
+              អនុប្រធានប្រចាំការ
+            </div>
 
-          {/* Official Stamp & Signature of ឆាយ វ៉ាន់ស៊ី */}
-          <div className="h-28 my-1 flex items-center justify-center">
+            {/* Image floating directly on top of the text section */}
             <img
               src={SIGNATURE_CHHAY_VANNSY_BASE64}
               alt="ត្រា និងហត្ថលេខា ឆាយ វ៉ាន់ស៊ី"
-              className="h-28 max-w-[240px] object-contain select-none pointer-events-none drop-shadow-xs"
+              className="absolute -top-6 -left-4 max-w-[240px] h-auto object-contain select-none pointer-events-none drop-shadow-xs z-10"
             />
-          </div>
 
-          <div className="text-slate-950 font-bold text-sm tracking-wide mt-1">
-            {metadata.signerLeftName || 'ឆាយ វ៉ាន់ស៊ី'}
+            <div className="text-slate-950 font-normal text-sm tracking-wide leading-none mt-30 ml-26 ">
+              {metadata.signerLeftName || 'ឆាយ វ៉ាន់ស៊ី'}
+            </div>
           </div>
         </div>
 
         {/* Right Signer */}
-        <div className="space-y-1 font-moul w-64 flex flex-col items-center">
-          <div className="text-slate-800 text-xs font-semibold">
+        <div className="w-64 flex flex-col items-center">
+          {/* Date / Location */}
+          <div className="text-slate-800 text-xs font-normal leading-tight">
             {metadata.signerRightDateLocation || 'ជើងព្រៃ ថ្ងៃទី ៧ ខែតុលា ឆ្នាំ២០២៦'}
           </div>
-          <div className="text-slate-900 font-normal">អ្នកធ្វើតារាង</div>
 
-          {/* Authentic Signature of ស៊ីម ល័ក្ខ */}
-          <div className="h-28 my-1 flex items-center justify-center">
+          {/* Title Block */}
+          <div className="text-slate-900 font-normal leading-none mt-1 relative z-0">
+            អ្នកធ្វើតារាង
+          </div>
+
+          {/* Authentic Signature - Overlapping relative layer */}
+          <div className="relative z-10 -my-4 flex items-center justify-center">
             <img
               src={SIGNATURE_SIM_LEAKH_BASE64}
               alt="ហត្ថលេខា ស៊ីម ល័ក្ខ"
-              className="h-24 max-w-[200px] object-contain select-none pointer-events-none drop-shadow-xs"
+              className="max-w-[100px] h-auto object-contain select-none pointer-events-none drop-shadow-xs"
             />
           </div>
 
-          <div className="text-slate-950 font-bold text-sm tracking-wide mt-1">
+          {/* Name Block */}
+          <div className="text-slate-950 font-normal text-sm tracking-wide leading-none relative z-0">
             {metadata.signerRightName || 'ស៊ីម ល័ក្ខ'}
           </div>
         </div>

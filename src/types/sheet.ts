@@ -71,6 +71,7 @@ export interface SheetMetadata {
   signerRightDateLocation: string; // "ជើងព្រៃ ថ្ងៃទី ០៧ ខែតុលា ឆ្នាំ២០២៦"
   signerRightTitle: string; // "អ្នកធ្វើតារាង"
   signerRightName: string; // "ស៊ីម ល័ក្ខ"
+  adminPin?: string; // e.g. "1234" (District Admin Unlock PIN stored in settings collection)
 }
 
 export interface MonthlyRecord {

@@ -28,7 +28,7 @@ export const OAuthHelpModal: React.FC<OAuthHelpModalProps> = ({
               <ShieldAlert className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h3 className="font-bold text-base md:text-lg leading-tight">
+              <h3 className="font-normal text-base md:text-lg leading-tight">
                 វិធីដោះស្រាយ Error 403: access_denied
               </h3>
               <p className="text-xs text-amber-100 mt-0.5 font-medium">
@@ -50,7 +50,7 @@ export const OAuthHelpModal: React.FC<OAuthHelpModalProps> = ({
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3 text-amber-900">
             <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
             <div className="text-xs md:text-sm space-y-1">
-              <p className="font-semibold text-amber-950">
+              <p className="font-normal text-amber-950">
                 មូលហេតុដែល Google រារាំង (Error 403 / Access blocked)៖
               </p>
               <p>
@@ -62,11 +62,11 @@ export const OAuthHelpModal: React.FC<OAuthHelpModalProps> = ({
           {/* Solution 1: Add to Test Users */}
           <div className="border border-blue-200 rounded-xl p-4.5 bg-blue-50/40 space-y-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-blue-900 font-bold">
+              <div className="flex items-center gap-2 text-blue-900 font-normal">
                 <Users className="w-5 h-5 text-blue-600" />
                 <span>វិធីទី ១៖ បន្ថែម Email ទៅក្នុង Test Users (ងាយស្រួល និងលឿនបំផុត)</span>
               </div>
-              <span className="text-[11px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">
+              <span className="text-[11px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-normal">
                 ណែនាំ
               </span>
             </div>
@@ -103,7 +103,7 @@ export const OAuthHelpModal: React.FC<OAuthHelpModalProps> = ({
 
           {/* Solution 2: Publish App */}
           <div className="border border-emerald-200 rounded-xl p-4.5 bg-emerald-50/40 space-y-3">
-            <div className="flex items-center gap-2 text-emerald-900 font-bold">
+            <div className="flex items-center gap-2 text-emerald-900 font-normal">
               <Globe className="w-5 h-5 text-emerald-600" />
               <span>វិធីទី ២៖ ប្តូរ Publishing status ទៅជា &quot;In Production&quot; (អនុញ្ញាតគ្រប់ Gmail)</span>
             </div>
@@ -115,7 +115,7 @@ export const OAuthHelpModal: React.FC<OAuthHelpModalProps> = ({
                   href={directConsentUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-emerald-700 font-semibold underline hover:text-emerald-900"
+                  className="text-emerald-700 font-normal underline hover:text-emerald-900"
                 >
                   OAuth consent screen
                 </a>{' '}
@@ -140,7 +140,7 @@ export const OAuthHelpModal: React.FC<OAuthHelpModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+            className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-normal shadow-xs transition-colors cursor-pointer"
           >
             យល់ព្រម / បិទ
           </button>
